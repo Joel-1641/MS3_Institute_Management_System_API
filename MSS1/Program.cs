@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MSS1.Database;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MSS1.Interfaces;
+using MSS1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ITDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("ITDBConnection"))
 );
+builder.Services.AddScoped<IUserRepository,IUserRepository>();
+builder.Services.AddScoped<IUserService,UserService>();
 
 var app = builder.Build();
 
