@@ -9,7 +9,7 @@ namespace MSS1.Entities
         public string RoleName { get; set; }   // Role Name (Admin, Student)
 
         // Navigation property
-        public ICollection<User>? Users { get; set; }
+        public ICollection<User> Users { get; set; }
 
     }
 }

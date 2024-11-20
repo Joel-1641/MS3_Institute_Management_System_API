@@ -14,7 +14,7 @@ namespace MSS1.Database
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Authentication> Authenticators { get; set; }
+        public DbSet<Authentication> Authentications { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
@@ -54,6 +54,14 @@ namespace MSS1.Database
                     j => j.HasOne(sc => sc.Student).WithMany().HasForeignKey(sc => sc.StudentId),
                     j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
                 );
+            modelBuilder.Entity<Role>().HasData(
+                new Role { RoleId = 1, RoleName = "Admin" },
+                new Role { RoleId = 2,RoleName = "User" }
+                );
+            modelBuilder.Entity<Authentication>()
+       .HasOne(a => a.User)
+       .WithOne(u => u.Authentication)
+       .HasForeignKey<Authentication>(a => a.UserId);
         }
 
     }

@@ -1,6 +1,6 @@
-﻿namespace MSS1.DTOs
+﻿namespace MSS1.DTOs.RequestDTOs
 {
-    public class UserDto
+    public class RegisterUserRequestDTO
     {
         public string FullName { get; set; }
         public string Email { get; set; }

@@ -11,9 +11,9 @@ namespace MSS1.Entities
         public string ProfilePicture { get; set; }    // Profile picture (URL or base64 string)
 
         // Navigation property
-        public User? User { get; set; }
-        public ICollection<Course>? Courses { get; set; }  // Many-to-many relationship with Courses
-        public ICollection<Payment>? Payments { get; set; }  // One-to-many relationship with Payments
+        public User User { get; set; }
+        public ICollection<Course> Courses { get; set; }  // Many-to-many relationship with Courses
+        public ICollection<Payment> Payments { get; set; }  // One-to-many relationship with Payments
 
     }
 }

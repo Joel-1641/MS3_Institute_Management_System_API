@@ -12,7 +12,7 @@ namespace MSS1.Entities
         public string PasswordSalt { get; set; }     // Salt used for password hashing
 
         // Navigation property
-        public User? User { get; set; }
+        public User User { get; set; }
 
     }
 }

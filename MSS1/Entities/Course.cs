@@ -1,6 +1,4 @@
-﻿using MSS1.Entities;
-
-namespace MSS1
+﻿namespace MSS1.Entities
 {
     public class Course
     {
@@ -11,7 +9,7 @@ namespace MSS1
         public string Description { get; set; }
 
         // Navigation property
-        public ICollection<Student>? Students { get; set; }  // Many-to-many relationship with Students
+        public ICollection<Student> Students { get; set; }  // Many-to-many relationship with Students
 
     }
 }

@@ -12,7 +12,7 @@ namespace MSS1.Entities
         public DateTime DateCreated { get; set; }
 
         // Navigation property
-        public User? User { get; set; }
+        public User User { get; set; }
 
     }
 }

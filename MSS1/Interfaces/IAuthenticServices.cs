@@ -1,0 +1,12 @@
+﻿using MSS1.DTOs.RequestDTOs;
+using MSS1.DTOs.ResponseDTOs;
+
+namespace MSS1.Interfaces
+{
+    public interface IAuthenticServices
+    {
+        Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO);
+        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO requestDTO, string secretKey);
+        Task LogoutAsync(string token);
+    }
+}
