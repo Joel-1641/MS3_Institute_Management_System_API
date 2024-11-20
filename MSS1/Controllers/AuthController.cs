@@ -88,5 +88,34 @@ namespace MSS1.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDTO requestDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { Error = "Invalid request data." });
+
+            try
+            {
+                var response = await _authService.ForgotPasswordAsync(requestDTO);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDTO request)
+        {
+            try
+            {
+                await _authService.ResetPasswordAsync(request);
+                return Ok(new { message = "Password reset successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

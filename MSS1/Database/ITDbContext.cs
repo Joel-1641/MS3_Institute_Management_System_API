@@ -64,6 +64,9 @@ namespace MSS1.Database
        .HasForeignKey<Authentication>(a => a.UserId);
         }
 
+       
+
+
     }
 
 }

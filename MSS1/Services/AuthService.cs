@@ -1,4 +1,5 @@
-﻿using MSS1.Interfaces;
+﻿using MSS1.DTOs.ResponseDTOs;
+using MSS1.Interfaces;
 
 namespace MSS1.Services
 {
@@ -18,5 +19,6 @@ namespace MSS1.Services
 
             _tokenRepository.InvalidateToken(token);
         }
+      
     }
 }

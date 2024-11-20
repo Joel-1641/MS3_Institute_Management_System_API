@@ -11,6 +11,8 @@ namespace MSS1.Entities
         public string HashedPassword { get; set; }   // Hashed password
         public string PasswordSalt { get; set; }     // Salt used for password hashing
 
+        public string PasswordResetToken { get; set; } // Token for password reset
+        public DateTime? TokenExpiration { get; set; }
         // Navigation property
         public User User { get; set; }
 

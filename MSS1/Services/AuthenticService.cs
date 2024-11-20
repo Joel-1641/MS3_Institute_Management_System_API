@@ -1,50 +1,36 @@
 ﻿using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
-
 using MSS1.Interfaces;
-using MSS1.Repository;
 using System;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace MSS1.Services
 {
-    public class AuthenticService : IAuthenticServices
+    public class AuthenticService(
+        IAuthenticationRepository repository,
+        IPasswordHasher passwordHasher,
+        ITokenRepository tokenRepository) : IAuthenticServices
     {
-        private readonly IAuthenticationRepository _repository;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ITokenRepository _tokenRepository;
-
-        public AuthenticService(IAuthenticationRepository repository, IPasswordHasher passwordHasher, ITokenRepository tokenRepository)
-        {
-            _repository = repository;
-            _passwordHasher = passwordHasher;
-            _tokenRepository = tokenRepository;
-        }
+        private readonly IAuthenticationRepository _repository = repository;
+        private readonly IPasswordHasher _passwordHasher = passwordHasher;
+        private readonly ITokenRepository _tokenRepository = tokenRepository;
 
         /// <summary>
         /// Registers a new user.
         /// </summary>
         public async Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO)
         {
-            // Check if the user already exists
             var existingUser = await _repository.GetUserByEmailAsync(requestDTO.Email);
-            if (existingUser != null)
-            {
+            if (existingUser is not null)
                 throw new Exception("User with this email already exists.");
-            }
 
-            // Fetch role
-            var role = await _repository.GetRoleByIdAsync(requestDTO.RoleId);
-            if (role == null)
-            {
-                throw new Exception("Invalid role ID.");
-            }
+            var role = await _repository.GetRoleByIdAsync(requestDTO.RoleId)
+                ?? throw new Exception("Invalid role ID.");
 
-            // Hash the password
             var (hashedPassword, salt) = _passwordHasher.HashPassword(requestDTO.Password);
 
-            // Create user and authentication objects
             var user = new User
             {
                 FullName = requestDTO.FullName,
@@ -57,11 +43,9 @@ namespace MSS1.Services
                 }
             };
 
-            // Add user to the database
             await _repository.AddUserAsync(user);
             await _repository.SaveChangesAsync();
 
-            // Return response
             return new RegisterUserResponseDTO
             {
                 UserId = user.UserId,
@@ -71,41 +55,96 @@ namespace MSS1.Services
                 Message = "User registered successfully."
             };
         }
+
+        /// <summary>
+        /// Authenticates a user and generates a JWT token.
+        /// </summary>
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO requestDTO, string secretKey)
         {
-            // Fetch authentication details by email
-            var auth = await _repository.GetAuthenticationByEmailAsync(requestDTO.Email);
-            if (auth == null)
-            {
-                throw new Exception("Invalid email or password.");
-            }
+            var auth = await _repository.GetAuthenticationByEmailAsync(requestDTO.Email)
+                ?? throw new Exception("Invalid email or password.");
 
-            // Verify the password
-            var isPasswordValid = _passwordHasher.VerifyPassword(requestDTO.Password, auth.HashedPassword, auth.PasswordSalt);
-            if (!isPasswordValid)
-            {
+            if (!_passwordHasher.VerifyPassword(requestDTO.Password, auth.HashedPassword, auth.PasswordSalt))
                 throw new Exception("Invalid email or password.");
-            }
 
-            // Generate JWT token
             var token = TokenHelper.GenerateJwtToken(auth.User, secretKey);
 
-            // Prepare response
             return new LoginResponseDTO
             {
                 Token = token,
                 FullName = auth.User.FullName,
                 Role = auth.User.Role.RoleName
             };
-
         }
+
+        /// <summary>
+        /// Logs out a user by invalidating their token.
+        /// </summary>
         public async Task LogoutAsync(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentException("Token cannot be null or empty.");
 
-            // Add token to blacklist or cache for invalidation
-            await _tokenRepository.InvalidateTokenAsync(token);  // This now works
+            await _tokenRepository.InvalidateTokenAsync(token);
+        }
+
+        /// <summary>
+        /// Sends a password reset email to the user.
+        /// </summary>
+        public async Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO)
+        {
+            var auth = await _repository.GetAuthenticationByEmailAsync(requestDTO.Email)
+                ?? throw new Exception("User with this email does not exist.");
+
+            var resetToken = Guid.NewGuid().ToString();
+            auth.PasswordResetToken = resetToken;
+            auth.TokenExpiration = DateTime.UtcNow.AddHours(1);
+            await _repository.SaveChangesAsync();
+
+            SendEmail(auth.Email, "Password Reset Link",
+                $"Click the link to reset your password: https://example.com/reset-password?token={resetToken}");
+
+            return new ForgotPasswordResponseDTO
+            {
+                Message = "Password reset link has been sent to the provided email address."
+            };
+        }
+
+        /// <summary>
+        /// Resets a user's password using a reset token.
+        /// </summary>
+        public async Task ResetPasswordAsync(ResetPasswordRequestDTO request)
+        {
+            var auth = await _repository.GetByResetTokenAsync(request.Token)
+                ?? throw new Exception("Invalid or expired token.");
+
+            if (auth.TokenExpiration < DateTime.UtcNow)
+                throw new Exception("Expired token.");
+
+            var (hashedPassword, salt) = _passwordHasher.HashPassword(request.NewPassword);
+            await _repository.UpdatePasswordAsync(auth, hashedPassword, salt);
+        }
+
+        /// <summary>
+        /// Sends an email. Replace with a real email service in production.
+        /// </summary>
+        private void SendEmail(string toEmail, string subject, string body)
+        {
+            try
+            {
+                var mailMessage = new MailMessage("noreply@example.com", toEmail)
+                {
+                    Subject = subject,
+                    Body = body
+                };
+
+                using var smtpClient = new SmtpClient("smtp.example.com");
+                smtpClient.Send(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to send email: {ex.Message}");
+            }
         }
     }
 }
