@@ -11,14 +11,13 @@ namespace MSS1.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        // Use primary constructor to declare dependencies
         private readonly IAuthenticServices _authService;
         private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthenticServices authService, IConfiguration configuration)
-        {
-            _authService = authService;
-            _configuration = configuration;
-        }
+        // Primary constructor to initialize the dependencies
+        public AuthController(IAuthenticServices authService, IConfiguration configuration) =>
+            (_authService, _configuration) = (authService, configuration);
 
         /// <summary>
         /// Registers a new user.

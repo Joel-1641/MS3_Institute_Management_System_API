@@ -1,7 +1,7 @@
 ﻿using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
-using MSS1.Helpers;
+
 using MSS1.Interfaces;
 using MSS1.Repository;
 using System;
@@ -104,8 +104,8 @@ namespace MSS1.Services
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentException("Token cannot be null or empty.");
 
-            // Example: Add token to blacklist or cache for invalidation
-            await _tokenRepository.InvalidateTokenAsync(token);
+            // Add token to blacklist or cache for invalidation
+            await _tokenRepository.InvalidateTokenAsync(token);  // This now works
         }
     }
 }

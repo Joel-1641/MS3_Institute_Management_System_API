@@ -4,8 +4,9 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MSS1;
 
-namespace MSS1.Helpers
+namespace MSS1 // Changed the namespace to MSS1 to match the folder
 {
     public static class TokenHelper
     {

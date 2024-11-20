@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace MSS1.Migrations
 {
     /// <inheritdoc />
-    public partial class usha : Migration
+    public partial class Final : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,7 +70,6 @@ namespace MSS1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     AdminRoleType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AdminPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -84,7 +85,7 @@ namespace MSS1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authenticators",
+                name: "Authentications",
                 columns: table => new
                 {
                     AuthenticationId = table.Column<int>(type: "int", nullable: false)
@@ -96,9 +97,9 @@ namespace MSS1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authenticators", x => x.AuthenticationId);
+                    table.PrimaryKey("PK_Authentications", x => x.AuthenticationId);
                     table.ForeignKey(
-                        name: "FK_Authenticators_Users_UserId",
+                        name: "FK_Authentications_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -195,6 +196,15 @@ namespace MSS1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "RoleId", "RoleName" },
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "User" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_UserId",
                 table: "Admins",
@@ -202,8 +212,8 @@ namespace MSS1.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authenticators_UserId",
-                table: "Authenticators",
+                name: "IX_Authentications_UserId",
+                table: "Authentications",
                 column: "UserId",
                 unique: true);
 
@@ -241,7 +251,7 @@ namespace MSS1.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
-                name: "Authenticators");
+                name: "Authentications");
 
             migrationBuilder.DropTable(
                 name: "Notifications");

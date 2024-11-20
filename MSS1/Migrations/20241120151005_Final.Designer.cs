@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSS1.Migrations
 {
     [DbContext(typeof(ITDbContext))]
-    [Migration("20241119172636_usha")]
-    partial class usha
+    [Migration("20241120151005_Final")]
+    partial class Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,9 +37,6 @@ namespace MSS1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AdminRoleType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Department")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastLoginDate")
@@ -81,7 +78,7 @@ namespace MSS1.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Authenticators");
+                    b.ToTable("Authentications");
                 });
 
             modelBuilder.Entity("MSS1.Entities.Course", b =>
@@ -182,6 +179,18 @@ namespace MSS1.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            RoleName = "User"
+                        });
                 });
 
             modelBuilder.Entity("MSS1.Entities.Student", b =>
