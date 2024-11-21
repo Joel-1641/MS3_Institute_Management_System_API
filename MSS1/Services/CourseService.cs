@@ -53,5 +53,33 @@ namespace MSS1.Services
                 Description = course.Description
             });
         }
+        public async Task<CourseResponseDTO> UpdateCourseAsync(int courseId, AddCourseRequestDTO request)
+        {
+            // Fetch the existing course
+            var course = await _courseRepository.GetCourseByIdAsync(courseId);
+            if (course == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+
+            // Update the course properties
+            course.CourseName = request.CourseName;
+            course.Level = request.Level;
+            course.CourseFee = request.CourseFee;
+            course.Description = request.Description;
+
+            // Save the changes
+            var updatedCourse = await _courseRepository.UpdateCourseAsync(course);
+
+            // Map the updated course to a response DTO
+            return new CourseResponseDTO
+            {
+                CourseId = updatedCourse.CourseId,
+                CourseName = updatedCourse.CourseName,
+                Level = updatedCourse.Level,
+                CourseFee = updatedCourse.CourseFee,
+                Description = updatedCourse.Description
+            };
+        }
     }
 }

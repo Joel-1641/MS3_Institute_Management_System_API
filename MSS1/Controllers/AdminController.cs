@@ -126,5 +126,22 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = ex.Message });
             }
         }
+        [HttpPut("courses/{courseId}")]
+        public async Task<IActionResult> UpdateCourse(int courseId, [FromBody] AddCourseRequestDTO request)
+        {
+            try
+            {
+                var updatedCourse = await _courseService.UpdateCourseAsync(courseId, request);
+                return Ok(new { Message = "Course updated successfully.", Data = updatedCourse });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }

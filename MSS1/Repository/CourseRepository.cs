@@ -29,6 +29,12 @@ namespace MSS1.Repository
         {
             return await _context.Courses.ToListAsync();
         }
+        public async Task<Course> UpdateCourseAsync(Course course)
+        {
+            _context.Courses.Update(course);
+            await _context.SaveChangesAsync();
+            return course;
+        }
     }
 }
 
