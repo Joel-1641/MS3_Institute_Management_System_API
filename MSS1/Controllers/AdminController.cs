@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Interfaces;
+using MSS1.Services;
 
 namespace MSS1.Controllers
 {
@@ -11,10 +12,12 @@ namespace MSS1.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ICourseService _courseService;
 
-        public AdminController(IUserService userService)
+        public AdminController(IUserService userService,ICourseService courseService)
         {
             _userService = userService;
+            _courseService = courseService;
         }
 
         /// <summary>
@@ -93,6 +96,21 @@ namespace MSS1.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("courses")]
+        public async Task<IActionResult> AddCourse([FromBody] AddCourseRequestDTO request)
+        {
+            try
+            {
+                // Add the course using the service
+                var courseResponse = await _courseService.AddCourseAsync(request);
+                return CreatedAtAction(nameof(AddCourse), new { courseId = courseResponse.CourseId }, courseResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
             }
         }
     }

@@ -38,6 +38,8 @@ internal class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+        builder.Services.AddScoped<ICourseService, CourseService>();
 
         //builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IAuthenticationService, AuthenticationService>();
 
