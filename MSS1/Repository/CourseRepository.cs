@@ -35,6 +35,16 @@ namespace MSS1.Repository
             await _context.SaveChangesAsync();
             return course;
         }
+        public async Task<bool> DeleteCourseAsync(int courseId)
+        {
+            var course = await GetCourseByIdAsync(courseId);
+            if (course == null) return false;
+
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
 

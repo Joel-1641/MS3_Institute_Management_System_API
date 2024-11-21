@@ -81,5 +81,15 @@ namespace MSS1.Services
                 Description = updatedCourse.Description
             };
         }
+        public async Task<bool> DeleteCourseAsync(int courseId)
+        {
+            var courseExists = await _courseRepository.GetCourseByIdAsync(courseId);
+            if (courseExists == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+
+            return await _courseRepository.DeleteCourseAsync(courseId);
+        }
     }
 }

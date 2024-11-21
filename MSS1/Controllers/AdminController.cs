@@ -143,5 +143,26 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = ex.Message });
             }
         }
+        [HttpDelete("courses/{courseId}")]
+        public async Task<IActionResult> DeleteCourse(int courseId)
+        {
+            try
+            {
+                var result = await _courseService.DeleteCourseAsync(courseId);
+                if (result)
+                {
+                    return Ok(new { Message = "Course deleted successfully." });
+                }
+                return NotFound(new { Message = "Course not found." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }

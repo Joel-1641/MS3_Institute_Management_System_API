@@ -8,5 +8,6 @@ namespace MSS1.Interfaces
         Task<Course> GetCourseByIdAsync(int courseId);
         Task<IEnumerable<Course>> GetAllCoursesAsync();
         Task<Course> UpdateCourseAsync(Course course);
+        Task<bool> DeleteCourseAsync(int courseId);
     }
 }
