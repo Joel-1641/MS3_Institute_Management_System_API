@@ -53,5 +53,28 @@ namespace MSS1.Repository
             return await _context.Authentications
                 .AnyAsync(auth => auth.Email == email && auth.UserId != excludeUserId);
         }
+        public async Task<User> GetUsersByIdAsync(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.Authentication)
+                .Include(u => u.Admin)
+                .Include(u => u.Student)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+        public async Task<bool> IsUserExistsAsync(int userId)
+        {
+            return await _context.Users.AnyAsync(u => u.UserId == userId);
+        }
+
+        public async Task<bool> DeleteUserAsync(int userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user == null) return false;
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

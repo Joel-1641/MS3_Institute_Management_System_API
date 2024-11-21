@@ -76,5 +76,24 @@ namespace MSS1.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [HttpDelete("users/{userId}")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            try
+            {
+                // Admin validation logic should be implemented here, for now we assume user is an admin
+
+                var deletedUser = await _userService.DeleteUserAsync(userId);
+                return Ok(new { Message = "User deleted successfully.", Data = deletedUser });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }

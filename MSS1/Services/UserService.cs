@@ -111,6 +111,26 @@ namespace MSS1.Services
                 RoleName = role.RoleName
             };
         }
+        public async Task<AddUserResponseDTO> DeleteUserAsync(int userId)
+        {
+            var userExists = await _userRepository.IsUserExistsAsync(userId);
+            if (!userExists)
+                throw new KeyNotFoundException("User not found.");
+
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            // Handle the role and user deletion process
+            await _userRepository.DeleteUserAsync(userId);
+
+            // Return user data as a response after deletion
+            return new AddUserResponseDTO
+            {
+                UserId = user.UserId,
+                FullName = user.FullName,
+                Email = user.Authentication?.Email,
+                RoleName = user.Role?.RoleName
+            };
+        }
 
         private string GenerateSalt()
         {

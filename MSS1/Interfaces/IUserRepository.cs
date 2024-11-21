@@ -10,5 +10,8 @@ namespace MSS1.Interfaces
         Task<User> GetUserByIdAsync(int userId);
         Task<User> UpdateUserAsync(User user);
         Task<bool> IsEmailExistsAsyncById(string email, int excludeUserId);
+        Task<User> GetUsersByIdAsync(int userId);
+        Task<bool> DeleteUserAsync(int userId);
+        Task<bool> IsUserExistsAsync(int userId);
     }
 }
