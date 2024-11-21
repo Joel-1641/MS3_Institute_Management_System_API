@@ -25,6 +25,10 @@ namespace MSS1.Repository
         {
             return await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == courseId);
         }
+        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        {
+            return await _context.Courses.ToListAsync();
+        }
     }
 }
 

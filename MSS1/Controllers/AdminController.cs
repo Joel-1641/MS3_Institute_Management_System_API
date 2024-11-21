@@ -113,5 +113,18 @@ namespace MSS1.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [HttpGet("courses")]
+        public async Task<IActionResult> GetAllCourses()
+        {
+            try
+            {
+                var courses = await _courseService.GetAllCoursesAsync();
+                return Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }

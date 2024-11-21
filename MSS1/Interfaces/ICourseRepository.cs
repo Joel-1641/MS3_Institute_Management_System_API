@@ -6,5 +6,6 @@ namespace MSS1.Interfaces
     {
         Task<Course> AddCourseAsync(Course course);
         Task<Course> GetCourseByIdAsync(int courseId);
+        Task<IEnumerable<Course>> GetAllCoursesAsync();
     }
 }
