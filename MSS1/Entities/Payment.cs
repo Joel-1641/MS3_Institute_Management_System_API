@@ -11,7 +11,7 @@ namespace MSS1.Entities
         public string PaymentMethod { get; set; }  // e.g., Installments or Full Payment
         public string PaymentStatus { get; set; }  // e.g., Pending, Completed, Failed
         public DateTime PaymentDate { get; set; }
-
+        public bool IsForRegistrationFee { get; set; }  
         // Navigation property
         public Student Student { get; set; }
 

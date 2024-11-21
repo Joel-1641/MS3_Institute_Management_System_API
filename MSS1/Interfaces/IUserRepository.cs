@@ -7,5 +7,8 @@ namespace MSS1.Interfaces
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User> AddUserAsync(User user);
         Task<bool> IsEmailExistsAsync(string email);
+        Task<User> GetUserByIdAsync(int userId);
+        Task<User> UpdateUserAsync(User user);
+        Task<bool> IsEmailExistsAsyncById(string email, int excludeUserId);
     }
 }

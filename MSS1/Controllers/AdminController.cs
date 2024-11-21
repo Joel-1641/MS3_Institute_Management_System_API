@@ -59,5 +59,22 @@ namespace MSS1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
         }
+        [HttpPut("users/{userId}")]
+        public async Task<IActionResult> UpdateUser(int userId, [FromBody] AddUserRequestDTO request)
+        {
+            try
+            {
+                var updatedUser = await _userService.UpdateUserAsync(userId, request);
+                return Ok(updatedUser);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 }

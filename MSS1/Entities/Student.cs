@@ -8,7 +8,8 @@ namespace MSS1.Entities
         public int StudentId { get; set; }  // Primary Key
         public int UserId { get; set; }     // Foreign Key to User
         public decimal RegistrationFee { get; set; }  // Registration fee
-        public string ProfilePicture { get; set; }    // Profile picture (URL or base64 string)
+        public string ProfilePicture { get; set; }
+        public bool IsRegistrationFeePaid { get; set; }// Profile picture (URL or base64 string)
 
         // Navigation property
         public User User { get; set; }

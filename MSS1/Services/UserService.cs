@@ -73,6 +73,44 @@ namespace MSS1.Services
                 RoleName = role?.RoleName ?? "Unknown Role" // Null-check for role
             };
         }
+        public async Task<AddUserResponseDTO> UpdateUserAsync(int userId, AddUserRequestDTO request)
+        {
+            // Fetch the existing user
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null) throw new KeyNotFoundException("User not found.");
+
+            // Check if email is unique
+            if (await _userRepository.IsEmailExistsAsyncById(request.Email, userId))
+                throw new ArgumentException("Email is already in use.");
+
+            // Update user properties
+            user.FullName = request.FullName;
+            user.RoleId = request.RoleId;
+
+            // Update authentication details
+            user.Authentication.Email = request.Email;
+
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                var salt = GenerateSalt();
+                user.Authentication.PasswordSalt = salt;
+                user.Authentication.HashedPassword = HashPassword(request.Password, salt);
+            }
+
+            // Save changes
+            var updatedUser = await _userRepository.UpdateUserAsync(user);
+
+            // Get the role for the response
+            var role = await _roleRepository.GetRoleByIdAsync(updatedUser.RoleId);
+
+            return new AddUserResponseDTO
+            {
+                UserId = updatedUser.UserId,
+                FullName = updatedUser.FullName,
+                Email = updatedUser.Authentication.Email,
+                RoleName = role.RoleName
+            };
+        }
 
         private string GenerateSalt()
         {
