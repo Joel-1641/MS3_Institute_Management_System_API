@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using MSS1.Interfaces;
 using MSS1.Repository;
 using MSS1.Services;
+using MSS1.Repositories;
 //using AuthenticationService = MSS1.Services.AuthenticationService;
 
 internal class Program
@@ -36,6 +37,8 @@ internal class Program
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
         //builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IAuthenticationService, AuthenticationService>();
 
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

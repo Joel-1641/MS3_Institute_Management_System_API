@@ -59,10 +59,10 @@ namespace MSS1.Database
                 new Role { RoleId = 2,RoleName = "User" }
                 );
             modelBuilder.Entity<Authentication>()
-       .HasOne(a => a.User)
-       .WithOne(u => u.Authentication)
-       .HasForeignKey<Authentication>(a => a.UserId);
-        }
+                .HasOne(a => a.User)
+                .WithOne(u => u.Authentication)
+                .HasForeignKey<Authentication>(a => a.UserId);
+               }
 
        
 

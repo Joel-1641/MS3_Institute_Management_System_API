@@ -23,5 +23,16 @@ namespace MSS1.Repository
                 .Include(u => u.Student)    // Include Student data (if the user is a Student)
                 .ToListAsync();             // Asynchronously fetch the list
         }
+        public async Task<User> AddUserAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _context.Authentications.AnyAsync(auth => auth.Email == email);
+        }
     }
 }
