@@ -3,6 +3,7 @@ using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
 using MSS1.Repositories;
+using MSS1.Repository;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,11 +13,13 @@ namespace MSS1.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _studentRepository = studentRepository;
         }
 
         public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
@@ -150,5 +153,33 @@ namespace MSS1.Services
                 return Convert.ToBase64String(sha256.ComputeHash(saltedPassword));
             }
         }
+        public async Task AddStudentAsync(int userId, bool isRegistrationFeePaid)
+        {
+            // Validate the registration fee
+            if (!isRegistrationFeePaid)
+            {
+                throw new ArgumentException("Registration fee must be paid for the student to be created.");
+            }
+
+            // Check if the user exists
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            // Create a new student record
+            var student = new Student
+            {
+                UserId = userId,
+                RegistrationFee = 10000.00m, // Example registration fee
+                IsRegistrationFeePaid = isRegistrationFeePaid,
+                ProfilePicture = null // Set default profile picture or leave null
+            };
+
+            await _studentRepository.AddStudentAsync(student);
+        }
+
+
     }
 }

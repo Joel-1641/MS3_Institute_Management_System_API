@@ -55,9 +55,10 @@ namespace MSS1.Database
                     j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
                 );
             modelBuilder.Entity<Role>().HasData(
-                new Role { RoleId = 1, RoleName = "Admin" },
-                new Role { RoleId = 2,RoleName = "User" }
-                );
+     new Role { RoleId = 1, RoleName = "Admin" },
+     new Role { RoleId = 2, RoleName = "Student" }
+ );
+
             modelBuilder.Entity<Authentication>()
                 .HasOne(a => a.User)
                 .WithOne(u => u.Authentication)

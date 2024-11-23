@@ -49,7 +49,21 @@ namespace MSS1.Controllers
         {
             try
             {
+                // Add the user using the service
                 var userResponse = await _userService.AddUserAsync(request);
+
+                // If the RoleId is 2 (Student), add to the Student table
+                if (request.RoleId == 2)
+                {
+                    var isRegistrationFeePaid = request.IsRegistrationFeePaid; // Assume this field is part of AddUserRequestDTO
+                    if (!isRegistrationFeePaid)
+                    {
+                        return BadRequest(new { Message = "Registration fee must be paid for a user to be a student." });
+                    }
+
+                    await _userService.AddStudentAsync(userResponse.UserId, isRegistrationFeePaid);
+                }
+
                 return CreatedAtAction(nameof(AddUser), new { userId = userResponse.UserId }, userResponse);
             }
             catch (ArgumentException ex)
@@ -58,10 +72,10 @@ namespace MSS1.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (optional)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
         }
+
         [HttpPut("users/{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromBody] AddUserRequestDTO request)
         {
