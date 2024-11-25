@@ -20,6 +20,7 @@ namespace MSS1.Database
         public DbSet<Course> Courses { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<ContactUs> ContactUs { get; set; }
         //public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

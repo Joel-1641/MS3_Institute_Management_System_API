@@ -42,6 +42,8 @@ internal class Program
         builder.Services.AddScoped<ICourseService, CourseService>();
         builder.Services.AddScoped<IStudentRepository, StudentRepository>();
         builder.Services.AddScoped<IStudentService, StudentService>();
+        builder.Services.AddScoped<ContactUsService, ContactUsService>();
+        builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
 
         //builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IAuthenticationService, AuthenticationService>();
 
