@@ -19,5 +19,11 @@ namespace MSS1.Repository
             await _dbContext.SaveChangesAsync();
             return contact;
         }
+
+        //public async Task<ContactUs> GetContactDetails()
+        //{
+        //    _dbContext.ContactUs.
+        //}
+
     }
 }
