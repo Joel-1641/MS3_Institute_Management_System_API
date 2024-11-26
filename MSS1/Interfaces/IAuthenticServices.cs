@@ -8,7 +8,7 @@ namespace MSS1.Interfaces
         Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO);
         Task<LoginResponseDTO> LoginAsync(LoginRequestDTO requestDTO, string secretKey);
         Task LogoutAsync(string token);
-        Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO);
-        Task ResetPasswordAsync(ResetPasswordRequestDTO request);
+       // Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO);
+       // Task ResetPasswordAsync(ResetPasswordRequestDTO request);
     }
 }

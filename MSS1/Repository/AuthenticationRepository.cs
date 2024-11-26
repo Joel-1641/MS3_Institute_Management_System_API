@@ -65,16 +65,16 @@ namespace MSS1.Repository
         /// <summary>
         /// Updates a user's password and clears their reset token.
         /// </summary>
-        public async Task UpdatePasswordAsync(Authentication auth, string newHashedPassword, string newSalt)
-        {
-            if (auth == null) throw new ArgumentNullException(nameof(auth)); // Validation added
+        //public async Task UpdatePasswordAsync(Authentication auth, string newHashedPassword, string newSalt)
+        //{
+        //    if (auth == null) throw new ArgumentNullException(nameof(auth)); // Validation added
 
-            auth.HashedPassword = newHashedPassword ?? throw new ArgumentNullException(nameof(newHashedPassword));
-            auth.PasswordSalt = newSalt ?? throw new ArgumentNullException(nameof(newSalt));
-            auth.PasswordResetToken = null; // Clears the reset token
-            auth.TokenExpiration = null; // Clears the token expiration time
-            await _context.SaveChangesAsync(); // Commits changes to the database
-        }
+        //    auth.HashedPassword = newHashedPassword ?? throw new ArgumentNullException(nameof(newHashedPassword));
+        //    auth.PasswordSalt = newSalt ?? throw new ArgumentNullException(nameof(newSalt));
+        //    auth.PasswordResetToken = null; // Clears the reset token
+        //    auth.TokenExpiration = null; // Clears the token expiration time
+        //    await _context.SaveChangesAsync(); // Commits changes to the database
+        //}
        
         public async Task<Authentication> GetByResetTokenAsync(string token)
         {

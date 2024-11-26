@@ -10,7 +10,7 @@ namespace MSS1.Interfaces
         Task SaveChangesAsync();
         Task<Authentication> GetAuthenticationByEmailAsync(string email);
         Task<Authentication> GetByResetTokenAsync(string token);
-        Task UpdatePasswordAsync(Authentication auth, string newHashedPassword, string newSalt);
+        //Task UpdatePasswordAsync(Authentication auth, string newHashedPassword, string newSalt);
 
     }
 }

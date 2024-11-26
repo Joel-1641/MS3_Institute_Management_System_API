@@ -91,39 +91,39 @@ namespace MSS1.Services
         /// <summary>
         /// Sends a password reset email to the user.
         /// </summary>
-        public async Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO)
-        {
-            var auth = await _repository.GetAuthenticationByEmailAsync(requestDTO.Email)
-                ?? throw new Exception("User with this email does not exist.");
+        //public async Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO)
+        //{
+        //    var auth = await _repository.GetAuthenticationByEmailAsync(requestDTO.Email)
+        //        ?? throw new Exception("User with this email does not exist.");
 
-            var resetToken = Guid.NewGuid().ToString();
-            auth.PasswordResetToken = resetToken;
-            auth.TokenExpiration = DateTime.UtcNow.AddHours(1);
-            await _repository.SaveChangesAsync();
+        //    var resetToken = Guid.NewGuid().ToString();
+        //    auth.PasswordResetToken = resetToken;
+        //    auth.TokenExpiration = DateTime.UtcNow.AddHours(1);
+        //    await _repository.SaveChangesAsync();
 
-            SendEmail(auth.Email, "Password Reset Link",
-                $"Click the link to reset your password: https://example.com/reset-password?token={resetToken}");
+        //    SendEmail(auth.Email, "Password Reset Link",
+        //        $"Click the link to reset your password: https://example.com/reset-password?token={resetToken}");
 
-            return new ForgotPasswordResponseDTO
-            {
-                Message = "Password reset link has been sent to the provided email address."
-            };
-        }
+        //    return new ForgotPasswordResponseDTO
+        //    {
+        //        Message = "Password reset link has been sent to the provided email address."
+        //    };
+        //}
 
         /// <summary>
         /// Resets a user's password using a reset token.
         /// </summary>
-        public async Task ResetPasswordAsync(ResetPasswordRequestDTO request)
-        {
-            var auth = await _repository.GetByResetTokenAsync(request.Token)
-                ?? throw new Exception("Invalid or expired token.");
+        //public async Task ResetPasswordAsync(ResetPasswordRequestDTO request)
+        //{
+        //    var auth = await _repository.GetByResetTokenAsync(request.Token)
+        //        ?? throw new Exception("Invalid or expired token.");
 
-            if (auth.TokenExpiration < DateTime.UtcNow)
-                throw new Exception("Expired token.");
+        //    if (auth.TokenExpiration < DateTime.UtcNow)
+        //        throw new Exception("Expired token.");
 
-            var (hashedPassword, salt) = _passwordHasher.HashPassword(request.NewPassword);
-            await _repository.UpdatePasswordAsync(auth, hashedPassword, salt);
-        }
+        //    var (hashedPassword, salt) = _passwordHasher.HashPassword(request.NewPassword);
+        //    await _repository.UpdatePasswordAsync(auth, hashedPassword, salt);
+        //}
 
         /// <summary>
         /// Sends an email. Replace with a real email service in production.
