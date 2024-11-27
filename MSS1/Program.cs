@@ -48,6 +48,15 @@ internal class Program
         //builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IAuthenticationService, AuthenticationService>();
 
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+        });
 
         var app = builder.Build();
 
@@ -60,6 +69,7 @@ internal class Program
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
+        app.UseCors();
         app.MapControllers();
 
         app.Run();
