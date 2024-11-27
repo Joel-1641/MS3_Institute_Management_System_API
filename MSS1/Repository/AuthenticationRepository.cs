@@ -2,6 +2,7 @@
 using MSS1.Database;
 using MSS1.Entities;
 using MSS1.Interfaces;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MSS1.Repository
@@ -42,12 +43,20 @@ namespace MSS1.Repository
             if (user == null) throw new ArgumentNullException(nameof(user)); // Validation added
             await _context.Users.AddAsync(user); // Adds user asynchronously
         }
+        public async Task AddAdminAsync(Admin admin)
+        {
+            if (admin == null) throw new ArgumentNullException(nameof(admin));
+            await _context.Admins.AddAsync(admin); // Assuming `Admins` is a DbSet in your DbContext
+        }
+        
+
 
         /// <summary>
         /// Saves changes to the database.
         /// </summary>
         public async Task SaveChangesAsync()
         {
+           // _dbContext.Users.Add(user);
             await _context.SaveChangesAsync(); // Saves all pending changes
         }
 

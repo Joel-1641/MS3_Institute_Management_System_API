@@ -8,6 +8,7 @@ namespace MSS1.Interfaces
         Task<Role> GetRoleByIdAsync(int roleId);
         Task AddUserAsync(User user);
         Task SaveChangesAsync();
+        Task AddAdminAsync(Admin admin);
         Task<Authentication> GetAuthenticationByEmailAsync(string email);
         Task<Authentication> GetByResetTokenAsync(string token);
         //Task UpdatePasswordAsync(Authentication auth, string newHashedPassword, string newSalt);

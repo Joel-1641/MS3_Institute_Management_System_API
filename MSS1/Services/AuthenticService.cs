@@ -1,9 +1,11 @@
-﻿using MSS1.DTOs.RequestDTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
 using System;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MSS1.Services
@@ -20,10 +22,40 @@ namespace MSS1.Services
         /// <summary>
         /// Registers a new user.
         /// </summary>
+        /// 
+        public async Task ValidateEmailDomain(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new Exception("Email is required.");
+
+            var emailParts = email.Split('@');
+            if (emailParts.Length != 2 || emailParts[1].ToLower() != "gmail.com")
+                throw new Exception("Only Gmail addresses are allowed.");
+        }
+        public async Task ValidateEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new Exception("Email is required.");
+
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(email))
+                throw new Exception("Invalid email format.");
+
+            var domain = email.Split('@').LastOrDefault();
+            if (domain == null || domain.ToLower() != "gmail.com")
+                throw new Exception("Only Gmail addresses are allowed.");
+        }
+
+
         public async Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO)
         {
+            if (requestDTO == null) throw new ArgumentNullException(nameof(requestDTO));
+
+            if (requestDTO.RoleId != 1)
+                throw new Exception("Only Admins are allowed to register.");
+
             var existingUser = await _repository.GetUserByEmailAsync(requestDTO.Email);
-            if (existingUser is not null)
+            if (existingUser != null)
                 throw new Exception("User with this email already exists.");
 
             var role = await _repository.GetRoleByIdAsync(requestDTO.RoleId)
@@ -46,15 +78,29 @@ namespace MSS1.Services
             await _repository.AddUserAsync(user);
             await _repository.SaveChangesAsync();
 
+            // Add Admin to Admins table
+            var admin = new Admin
+            {
+                UserId = user.UserId,
+                fullName = user.FullName,
+                Email = user.Authentication.Email,
+               // RoleId = user.RoleId
+            };
+
+            await _repository.AddAdminAsync(admin);
+            await _repository.SaveChangesAsync();
+
             return new RegisterUserResponseDTO
             {
                 UserId = user.UserId,
                 FullName = user.FullName,
                 Email = user.Authentication.Email,
                 RoleName = role.RoleName,
-                Message = "User registered successfully."
+                Message = "Admin registered successfully."
             };
         }
+
+
 
         /// <summary>
         /// Authenticates a user and generates a JWT token.
@@ -146,5 +192,17 @@ namespace MSS1.Services
                 throw new Exception($"Failed to send email: {ex.Message}");
             }
         }
+        public async Task AddAdminAsync(Admin admin)
+        {
+            if (admin == null) throw new ArgumentNullException(nameof(admin));
+            await _repository.AddAdminAsync(admin);
+        }
+       
+
+       
+
+
+
+
     }
 }

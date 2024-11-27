@@ -28,10 +28,14 @@ namespace MSS1.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO requestDTO)
         {
             if (!ModelState.IsValid)
-                return BadRequest(new { Error = "Invalid request data." });
+                return BadRequest(ModelState);
 
             try
             {
+                // Validate email domain
+                await _authService.ValidateEmail(requestDTO.Email);
+
+                // Proceed with registration
                 var responseDTO = await _authService.RegisterUserAsync(requestDTO);
                 return Ok(responseDTO);
             }
@@ -40,6 +44,8 @@ namespace MSS1.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
+
+
 
         /// <summary>
         /// Authenticates a user and provides a JWT token.
