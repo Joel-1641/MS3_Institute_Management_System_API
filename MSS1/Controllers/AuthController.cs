@@ -94,6 +94,89 @@ namespace MSS1.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
+    
+
+            // Login for Student
+            [HttpPost("login/student")]
+            public async Task<IActionResult> LoginStudent([FromBody] LoginRequestDTO requestDTO)
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(new { Error = "Invalid login details." });
+
+                try
+                {
+                    var secretKey = _configuration["Jwt:SecretKey"];
+                    if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
+                        return StatusCode(500, new { Error = "Invalid JWT secret key configuration." });
+
+                    var responseDTO = await _authService.LoginAsync(requestDTO, secretKey);
+                    return Ok(responseDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { Error = ex.Message });
+                }
+            }
+
+            // Login for Lecturer
+            [HttpPost("login/lecturer")]
+            public async Task<IActionResult> LoginLecturer([FromBody] LoginRequestDTO requestDTO)
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(new { Error = "Invalid login details." });
+
+                try
+                {
+                    var secretKey = _configuration["Jwt:SecretKey"];
+                    if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
+                        return StatusCode(500, new { Error = "Invalid JWT secret key configuration." });
+
+                    var responseDTO = await _authService.LoginAsync(requestDTO, secretKey);
+                    return Ok(responseDTO);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { Error = ex.Message });
+                }
+            }
+
+            // Logout for Student
+            [HttpPost("logout/student")]
+            public async Task<IActionResult> LogoutStudent([FromBody] TokenRequestDTO tokenDTO)
+            {
+                if (string.IsNullOrWhiteSpace(tokenDTO.Token))
+                    return BadRequest(new { Error = "Token cannot be empty." });
+
+                try
+                {
+                    await _authService.LogoutAsync(tokenDTO.Token);
+                    return Ok(new { Message = "Logged out successfully." });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { Error = ex.Message });
+                }
+            }
+
+            // Logout for Lecturer
+            [HttpPost("logout/lecturer")]
+            public async Task<IActionResult> LogoutLecturer([FromBody] TokenRequestDTO tokenDTO)
+            {
+                if (string.IsNullOrWhiteSpace(tokenDTO.Token))
+                    return BadRequest(new { Error = "Token cannot be empty." });
+
+                try
+                {
+                    await _authService.LogoutAsync(tokenDTO.Token);
+                    return Ok(new { Message = "Logged out successfully." });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { Error = ex.Message });
+                }
+            }
+        }
+
         //[HttpPost("forgot-password")]
         //public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDTO requestDTO)
         //{
@@ -124,4 +207,4 @@ namespace MSS1.Controllers
         //    }
         //}
     }
-}
+

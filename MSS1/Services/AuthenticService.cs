@@ -90,6 +90,45 @@ namespace MSS1.Services
                 Role = user.Role.RoleName
             };
         }
+        public async Task<LoginResponseDTO> LoginAsyncUsers(LoginRequestDTO requestDTO, string secretKey)
+        {
+            var user = await _repository.GetUserByEmailAsync(requestDTO.Email)
+                ?? throw new Exception("Invalid email or password.");
+
+            if (!_passwordHasher.VerifyPassword(requestDTO.Password, user.PasswordHash, user.PasswordSalt))
+                throw new Exception("Invalid email or password.");
+
+            var token = TokenHelper.GenerateJwtToken(user, secretKey);
+
+            var roleName = user.Role.RoleName;
+
+            // Check roles and provide role-specific info
+            if (roleName == "Student")
+            {
+                // Additional logic for students if needed
+            }
+            else if (roleName == "Lecturer")
+            {
+                // Additional logic for lecturers if needed
+            }
+
+            return new LoginResponseDTO
+            {
+                Token = token,
+                FullName = user.FullName,
+                Role = roleName
+            };
+        }
+
+        public async Task LogoutAsyncUsers(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                throw new ArgumentException("Token cannot be null or empty.");
+
+            await _tokenRepository.InvalidateTokenAsync(token);
+        }
+
+        
 
         public async Task LogoutAsync(string token)
         {
