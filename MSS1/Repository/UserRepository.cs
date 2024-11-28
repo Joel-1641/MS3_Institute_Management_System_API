@@ -2,10 +2,13 @@
 using MSS1.Database;
 using MSS1.Entities;
 using MSS1.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MSS1.Repository
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ITDbContext _context;
 
@@ -14,67 +17,80 @@ namespace MSS1.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            // Ensure that you're including the necessary related data using Include
-            return await _context.Users
-                .Include(u => u.Role)       // Include Role data
-                .Include(u => u.Admin)      // Include Admin data (if the user is an Admin)
-                .Include(u => u.Student)    // Include Student data (if the user is a Student)
-                .ToListAsync();             // Asynchronously fetch the list
-        }
+        /// <summary>
+        /// Adds a new user to the database.
+        /// </summary>
+        /// <param name="user">The user entity to be added.</param>
+        /// <returns>The added user entity.</returns>
         public async Task<User> AddUserAsync(User user)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
+            await _context.Users.AddAsync(user); // Add the base User entity
+            await _context.SaveChangesAsync();   // Save changes to the database
+            return user; // Return the newly added User entity
+        }
+
+        public async Task<Student> AddStudentAsync(Student student)
+        {
+            await _context.Students.AddAsync(student); // Add the Student entity
+            await _context.SaveChangesAsync();         // Save changes to the database
+            return student;
+        }
+
+        public async Task<Lecturer> AddLecturerAsync(Lecturer lecturer)
+        {
+            await _context.Lecturers.AddAsync(lecturer); // Add the Lecturer entity
+            await _context.SaveChangesAsync();           // Save changes to the database
+            return lecturer;
+
+        }
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Role)        // Include the Role entity for each user
+                .Include(u => u.Student)     // Include the Student entity for users with role Student
+                .Include(u => u.Lecturer)    // Include the Lecturer entity for users with role Lecturer
+                .ToListAsync();              // Fetch the results asynchronously
+        }
+
+
+
+
+
+        /// <summary>
+        /// Checks if a NIC already exists in the database.
+        /// </summary>
+        /// <param name="nicNumber">The NIC number to be checked.</param>
+        /// <returns>True if the NIC exists; otherwise, false.</returns>
+        public async Task<bool> IsNICExistsAsync(string nicNumber)
+        {
+            return await _context.Users.AnyAsync(u => u.NICNumber == nicNumber);
         }
 
         public async Task<bool> IsEmailExistsAsync(string email)
         {
-            return await _context.Authentications.AnyAsync(auth => auth.Email == email);
-        }
-        public async Task<User> GetUserByIdAsync(int userId)
-        {
-            return await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.Authentication)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
-        }
-        public async Task<User> UpdateUserAsync(User user)
-        {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return user;
+            return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        public async Task<bool> IsEmailExistsAsyncById(string email, int excludeUserId)
-        {
-            return await _context.Authentications
-                .AnyAsync(auth => auth.Email == email && auth.UserId != excludeUserId);
-        }
-        public async Task<User> GetUsersByIdAsync(int userId)
-        {
-            return await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.Authentication)
-                .Include(u => u.Admin)
-                .Include(u => u.Student)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
-        }
-        public async Task<bool> IsUserExistsAsync(int userId)
-        {
-            return await _context.Users.AnyAsync(u => u.UserId == userId);
-        }
 
-        public async Task<bool> DeleteUserAsync(int userId)
-        {
-            var user = await GetUserByIdAsync(userId);
-            if (user == null) return false;
+        /// <summary>
+        /// Checks if an email already exists in the database.
+        /// </summary>
+        /// <param name="email">The email to be checked.</param>
+        /// <returns>True if the email exists; otherwise, false.</returns>
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+
+        /// <summary>
+        /// Gets a user by their ID, including related entities.
+        /// </summary>
+        /// <param name="userId">The user ID to fetch the user.</param>
+        /// <returns>The user entity if found; otherwise, null.</returns>
+        //public async Task<User> GetUserByIdAsync(int userId)
+        //{
+        //    return await _context.Users
+        //        .Include(u => u.Role)       // Include Role entity
+        //        .Include(u => u.Student)    // Include Student entity (if applicable)
+        //        .Include(u => u.Lecturer)   // Include Lecturer entity (if applicable)
+        //        .FirstOrDefaultAsync(u => u.UserId == userId); // Fetch user by ID
+        //}
     }
 }

@@ -4,8 +4,9 @@
     {
         public int UserId { get; set; }
         public string FullName { get; set; }
+        public string Email { get; set; }
         public string RoleName { get; set; }
-        //public string AdminRoleType { get; set; }  // Only for Admins
-        public string ProfilePicture { get; set; } // Only for Students
+        public string ProfilePicture { get; set; } // Include Profile Picture in the response
+        public object AdditionalData { get; set; } // Include Additional Data based on role (Student or Lecturer)
     }
 }

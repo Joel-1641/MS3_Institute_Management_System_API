@@ -21,6 +21,8 @@ namespace MSS1.Database
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
+        public DbSet<Lecturer> Lecturers { get; set; }
+        public DbSet<LecturerCourse> LecturerCourses { get; set; }
         //public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -56,15 +58,20 @@ namespace MSS1.Database
                     j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
                 );
             modelBuilder.Entity<Role>().HasData(
-     new Role { RoleId = 1, RoleName = "Admin" },
-     new Role { RoleId = 2, RoleName = "Student" }
- );
+        new Role { RoleId = 1, RoleName = "Admin" },
+        new Role { RoleId = 2, RoleName = "Student" },
+        new Role { RoleId = 3, RoleName = "Lecturer" }
+    );
 
             modelBuilder.Entity<Authentication>()
                 .HasOne(a => a.User)
                 .WithOne(u => u.Authentication)
                 .HasForeignKey<Authentication>(a => a.UserId);
-               }
+            // Unique NICNumber for Users
+            // Unique constraints
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.NICNumber).IsUnique();
+        }
 
        
 

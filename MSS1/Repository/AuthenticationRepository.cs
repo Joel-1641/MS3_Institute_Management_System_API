@@ -23,9 +23,12 @@ namespace MSS1.Repository
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users
-                .Include(u => u.Authentication)
-                .FirstOrDefaultAsync(u => u.Authentication.Email == email); // Includes Authentication details
+                .Include(u => u.Role) // Include the related Role entity if needed
+                .Include(u => u.Student) // Include the related Student entity if needed
+                .Include(u => u.Lecturer) // Include the related Lecturer entity if needed
+                .FirstOrDefaultAsync(u => u.Email == email); // Directly access the Email property
         }
+
 
         /// <summary>
         /// Retrieves a role by its ID.
@@ -45,10 +48,10 @@ namespace MSS1.Repository
         }
         public async Task AddAdminAsync(Admin admin)
         {
-            if (admin == null) throw new ArgumentNullException(nameof(admin));
-            await _context.Admins.AddAsync(admin); // Assuming `Admins` is a DbSet in your DbContext
+            await _context.Admins.AddAsync(admin);
         }
-        
+
+
 
 
         /// <summary>
