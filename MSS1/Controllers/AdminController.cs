@@ -24,19 +24,19 @@ namespace MSS1.Controllers
         /// Get all users (Admin access required)
         /// </summary>
         /// <returns>List of users</returns>
-        [HttpGet("users")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            try
-            {
-                var users = await _userService.GetAllUsersAsync();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
-        }
+        ////[HttpGet("users")]
+        ////public async Task<IActionResult> GetAllUsers()
+        ////{
+        ////    try
+        ////    {
+        ////        var users = await _userService.GetAllUsersAsync();
+        ////        return Ok(users);
+        ////    }
+        ////    catch (Exception ex)
+        ////    {
+        ////        return StatusCode(500, new { Message = ex.Message });
+        ////    }
+        ////}
 
 
 

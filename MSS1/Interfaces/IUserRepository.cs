@@ -18,7 +18,7 @@ namespace MSS1.Interfaces
         Task<bool> IsEmailExistsAsync(string email);
             Task<User> AddUserAsync(User user);
         //Task<User> GetUserByIdAsync(int userId);
-        Task<IEnumerable<User>> GetAllUsersAsync();
+      //  Task<IEnumerable<User>> GetAllUsersAsync();
         Task<Student> AddStudentAsync(Student student);
         Task<Lecturer> AddLecturerAsync(Lecturer lecturer);
 

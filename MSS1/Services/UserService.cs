@@ -116,25 +116,25 @@ namespace MSS1.Services
             };
         }
 
-        public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
-        {
-            var users = await _userRepository.GetAllUsersAsync();
+        //public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
+        //{
+        //    var users = await _userRepository.GetAllUsersAsync();
 
-            // Map User entity to UserResponseDTO
-            return users.Select(user => new UserResponseDTO
-            {
-                UserId = user.UserId,
-                FullName = user.FullName,
-                Email = user.Email,
-                RoleName = user.Role?.RoleName,
-                ProfilePicture = user.ProfilePicture, // Include Profile Picture
-                AdditionalData = user.RoleId == 2 ? // If Student (RoleId == 2)
-                                 new { user.Student?.RegistrationFee, user.Student?.IsRegistrationFeePaid } :
-                                 user.RoleId == 3 ? // If Lecturer (RoleId == 3)
-                                 new { Courses = user.Lecturer?.Courses.Select(c => c.CourseName).ToList() } :
-                                 null
-            });
-        }
+        //    // Map User entity to UserResponseDTO
+        //    return users.Select(user => new UserResponseDTO
+        //    {
+        //        UserId = user.UserId,
+        //        FullName = user.FullName,
+        //        Email = user.Email,
+        //        RoleName = user.Role?.RoleName,
+        //        ProfilePicture = user.ProfilePicture, // Include Profile Picture
+        //        AdditionalData = user.RoleId == 2 ? // If Student (RoleId == 2)
+        //                         new { user.Student?.RegistrationFee, user.Student?.IsRegistrationFeePaid } :
+        //                         user.RoleId == 3 ? // If Lecturer (RoleId == 3)
+        //                         new { Courses = user.Lecturer?.Courses.Select(c => c.CourseName).ToList() } :
+        //                         null
+        //    });
+        //}
 
 
 
