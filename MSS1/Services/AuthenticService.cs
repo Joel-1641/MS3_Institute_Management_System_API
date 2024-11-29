@@ -14,15 +14,18 @@ namespace MSS1.Services
         private readonly IAuthenticationRepository _repository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenRepository _tokenRepository;
+        private readonly IUserRepository userRepository;
 
         public AuthenticService(
             IAuthenticationRepository repository,
             IPasswordHasher passwordHasher,
-            ITokenRepository tokenRepository)
+            ITokenRepository tokenRepository,
+            IUserRepository userRepository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
             _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
+            
         }
 
         public async Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO)
@@ -168,5 +171,8 @@ namespace MSS1.Services
             if (domain == null || domain.ToLower() != "gmail.com")
                 throw new Exception("Only Gmail addresses are allowed.");
         }
+       
+
+         
     }
 }

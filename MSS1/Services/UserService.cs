@@ -24,21 +24,6 @@ namespace MSS1.Services
             _lecturerRepository = lecturerRepository;
         }
 
-        //public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
-        //{
-        //    var users = await _userRepository.GetAllUsersAsync();
-
-        //    // Map users to DTOs
-        //    var userResponseDTOs = users.Select(user => new UserResponseDTO
-        //    {
-        //        UserId = user.UserId,
-        //        FullName = user.FullName,
-        //        RoleName = user.Role?.RoleName, // Get the RoleName from the Role entity
-        //        ProfilePicture = user.Student?.ProfilePicture // Only applicable for Students
-        //    });
-
-        //    return userResponseDTOs;
-        //}
 
         public async Task<AddUserResponseDTO> AddUserAsync(AddUserRequestDTO request)
         {
@@ -116,87 +101,13 @@ namespace MSS1.Services
             };
         }
 
-        //public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
-        //{
-        //    var users = await _userRepository.GetAllUsersAsync();
-
-        //    // Map User entity to UserResponseDTO
-        //    return users.Select(user => new UserResponseDTO
-        //    {
-        //        UserId = user.UserId,
-        //        FullName = user.FullName,
-        //        Email = user.Email,
-        //        RoleName = user.Role?.RoleName,
-        //        ProfilePicture = user.ProfilePicture, // Include Profile Picture
-        //        AdditionalData = user.RoleId == 2 ? // If Student (RoleId == 2)
-        //                         new { user.Student?.RegistrationFee, user.Student?.IsRegistrationFeePaid } :
-        //                         user.RoleId == 3 ? // If Lecturer (RoleId == 3)
-        //                         new { Courses = user.Lecturer?.Courses.Select(c => c.CourseName).ToList() } :
-        //                         null
-        //    });
-        //}
+       
 
 
 
 
-        //public async Task<AddUserResponseDTO> UpdateUserAsync(int userId, AddUserRequestDTO request)
-        //{
-        //    // Fetch the existing user
-        //    var user = await _userRepository.GetUserByIdAsync(userId);
-        //    if (user == null) throw new KeyNotFoundException("User not found.");
-
-        //    // Check if email is unique
-        //    if (await _userRepository.IsEmailExistsAsyncById(request.Email, userId))
-        //        throw new ArgumentException("Email is already in use.");
-
-        //    // Update user properties
-        //    user.FullName = request.FullName;
-        //    user.RoleId = request.RoleId;
-
-        //    // Update authentication details
-        //    user.Authentication.Email = request.Email;
-
-        //    if (!string.IsNullOrEmpty(request.Password))
-        //    {
-        //        var salt = GenerateSalt();
-        //        user.Authentication.PasswordSalt = salt;
-        //        user.Authentication.HashedPassword = HashPassword(request.Password, salt);
-        //    }
-
-        //    // Save changes
-        //    var updatedUser = await _userRepository.UpdateUserAsync(user);
-
-        //    // Get the role for the response
-        //    var role = await _roleRepository.GetRoleByIdAsync(updatedUser.RoleId);
-
-        //    return new AddUserResponseDTO
-        //    {
-        //        UserId = updatedUser.UserId,
-        //        FullName = updatedUser.FullName,
-        //        Email = updatedUser.Authentication.Email,
-        //        RoleName = role.RoleName
-        //    };
-        //}
-        //public async Task<AddUserResponseDTO> DeleteUserAsync(int userId)
-        //{
-        //    var userExists = await _userRepository.IsUserExistsAsync(userId);
-        //    if (!userExists)
-        //        throw new KeyNotFoundException("User not found.");
-
-        //    var user = await _userRepository.GetUserByIdAsync(userId);
-
-        //    // Handle the role and user deletion process
-        //    await _userRepository.DeleteUserAsync(userId);
-
-        //    // Return user data as a response after deletion
-        //    return new AddUserResponseDTO
-        //    {
-        //        UserId = user.UserId,
-        //        FullName = user.FullName,
-        //        Email = user.Authentication?.Email,
-        //        RoleName = user.Role?.RoleName
-        //    };
-        //}
+      
+    
 
         private string GenerateSalt()
         {
@@ -216,32 +127,7 @@ namespace MSS1.Services
                 return Convert.ToBase64String(sha256.ComputeHash(saltedPassword));
             }
         }
-        //public async Task AddStudentAsync(int userId, bool isRegistrationFeePaid)
-        //{
-        //    // Validate the registration fee
-        //    if (!isRegistrationFeePaid)
-        //    {
-        //        throw new ArgumentException("Registration fee must be paid for the student to be created.");
-        //    }
-
-        //    // Check if the user exists
-        //    var user = await _userRepository.GetUserByIdAsync(userId);
-        //    if (user == null)
-        //    {
-        //        throw new KeyNotFoundException("User not found.");
-        //    }
-
-        //    // Create a new student record
-        //    var student = new Student
-        //    {
-        //        UserId = userId,
-        //        RegistrationFee = 10000.00m, // Example registration fee
-        //        IsRegistrationFeePaid = isRegistrationFeePaid,
-        //        ProfilePicture = null // Set default profile picture or leave null
-        //    };
-
-        //    await _studentRepository.AddStudentAsync(student);
-        //}
+       
 
 
     }

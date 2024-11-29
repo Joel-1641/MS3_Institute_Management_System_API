@@ -5,9 +5,11 @@ namespace MSS1.Interfaces
 {
     public interface ICourseService
     {
-        Task<CourseResponseDTO> AddCourseAsync(AddCourseRequestDTO request);
         Task<IEnumerable<CourseResponseDTO>> GetAllCoursesAsync();
-        Task<CourseResponseDTO> UpdateCourseAsync(int courseId, AddCourseRequestDTO request);
+        Task<CourseResponseDTO> GetCourseByIdAsync(int courseId);
+        Task<CourseResponseDTO> AddCourseAsync(AddCourseRequestDTO request);
+        Task<CourseResponseDTO> UpdateCourseAsync(UpdateCourseRequestDTO request);
         Task<bool> DeleteCourseAsync(int courseId);
+
     }
 }

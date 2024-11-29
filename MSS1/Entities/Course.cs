@@ -6,9 +6,17 @@ namespace MSS1.Entities
     {
         [Key]
         public int CourseId { get; set; } // Primary Key
+
+        [Required]
         public string CourseName { get; set; }
+
+        [Required]
         public string Level { get; set; } // Beginner, Intermediate, Advanced
+
+        [Required]
         public decimal CourseFee { get; set; }
+
+        
         public string Description { get; set; }
 
         // Navigation Properties

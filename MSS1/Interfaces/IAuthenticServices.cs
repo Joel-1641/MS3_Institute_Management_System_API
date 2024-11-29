@@ -13,7 +13,8 @@ namespace MSS1.Interfaces
         Task AddAdminAsync(Admin admin);
         Task ValidateEmailDomain(string email);
         Task ValidateEmail(string email);
-
+        Task<LoginResponseDTO> LoginAsyncUsers(LoginRequestDTO requestDTO, string secretKey);
+        Task LogoutAsyncUsers(string token);
 
         // Task<ForgotPasswordResponseDTO> ForgotPasswordAsync(ForgotPasswordRequestDTO requestDTO);
         // Task ResetPasswordAsync(ResetPasswordRequestDTO request);
