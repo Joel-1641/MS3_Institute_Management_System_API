@@ -3,7 +3,7 @@
     public class UpdateCourseRequestDTO
     {
         
-        public int CourseId { get; set; } // Required for identifying the course
+      public int CourseId { get; set; } // Required for identifying the course
 
         
         public string CourseName { get; set; }

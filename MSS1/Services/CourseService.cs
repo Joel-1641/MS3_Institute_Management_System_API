@@ -1,4 +1,5 @@
-﻿using MSS1.DTOs.RequestDTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
@@ -44,12 +45,6 @@ namespace MSS1.Services
 
         public async Task<CourseResponseDTO> AddCourseAsync(AddCourseRequestDTO request)
         {
-            if (await _courseRepository.IsDuplicateCourseAsync(request.CourseName, request.Level))
-            {
-                throw new ArgumentException($"A course with the name '{request.CourseName}' and level '{request.Level}' already exists.");
-            }
-
-
             var course = new Course
             {
                 CourseName = request.CourseName,
@@ -70,29 +65,20 @@ namespace MSS1.Services
             };
         }
 
+
         public async Task<CourseResponseDTO> UpdateCourseAsync(UpdateCourseRequestDTO request)
         {
-            // Find the course by ID
-            var course = await _courseRepository.GetCourseByIdAsync(request.CourseId);
-            if (course == null)
-                throw new ArgumentException("Course not found.");
-
-            // Check if a duplicate exists with the same CourseName and Level (but not the same CourseId)
-            if (await _courseRepository.IsDuplicateCourseAsync(request.CourseName, request.Level) &&
-                !(course.CourseName == request.CourseName && course.Level == request.Level))
+            var course = new Course
             {
-                throw new ArgumentException($"A course with the name '{request.CourseName}' and level '{request.Level}' already exists.");
-            }
-
-            // Update course details
-            course.CourseName = request.CourseName;
-            course.Level = request.Level;
-            course.CourseFee = request.CourseFee;
-            course.Description = request.Description;
+                CourseId = request.CourseId,
+                CourseName = request.CourseName,
+                Level = request.Level,
+                CourseFee = request.CourseFee,
+                Description = request.Description
+            };
 
             var updatedCourse = await _courseRepository.UpdateCourseAsync(course);
 
-            // Return the updated course as DTO
             return new CourseResponseDTO
             {
                 CourseId = updatedCourse.CourseId,
@@ -104,10 +90,31 @@ namespace MSS1.Services
         }
 
 
+
         public async Task<bool> DeleteCourseAsync(int courseId)
         {
             return await _courseRepository.DeleteCourseAsync(courseId);
         }
+        public async Task<CourseResponseDTO> GetCourseByNameAndLevelAsync(string courseName, string level)
+        {
+            var course = await _courseRepository.GetCourseByNameAndLevelAsync(courseName, level);
+
+            if (course == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+
+            return new CourseResponseDTO
+            {
+                CourseId = course.CourseId,
+                CourseName = course.CourseName,
+                Level = course.Level,
+                CourseFee = course.CourseFee,
+                Description = course.Description
+            };
+        }
+       
+
     }
 }
        

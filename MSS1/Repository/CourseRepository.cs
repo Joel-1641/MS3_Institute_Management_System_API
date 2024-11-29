@@ -27,17 +27,42 @@ namespace MSS1.Repository
 
         public async Task<Course> AddCourseAsync(Course course)
         {
-            await _context.Courses.AddAsync(course);
+            if (await IsDuplicateCourseAsync(course.CourseName, course.Level))
+            {
+                throw new ArgumentException($"A course with the name '{course.CourseName}' and level '{course.Level}' already exists.");
+            }
+
+            _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
         }
 
+
         public async Task<Course> UpdateCourseAsync(Course course)
         {
-            _context.Courses.Update(course);
+            var existingCourse = await _context.Courses.FindAsync(course.CourseId);
+
+            if (existingCourse == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+
+            // Check for duplicates (excluding the current course)
+            if (await IsDuplicateCourseAsync(course.CourseName, course.Level, course.CourseId))
+            {
+                throw new ArgumentException($"A course with the name '{course.CourseName}' and level '{course.Level}' already exists.");
+            }
+
+            // Update course fields
+            existingCourse.CourseName = course.CourseName;
+            existingCourse.Level = course.Level;
+            existingCourse.CourseFee = course.CourseFee;
+            existingCourse.Description = course.Description;
+
             await _context.SaveChangesAsync();
-            return course;
+            return existingCourse;
         }
+
 
         public async Task<bool> DeleteCourseAsync(int courseId)
         {
@@ -49,13 +74,20 @@ namespace MSS1.Repository
             return true;
         }
 
-        public async Task<bool> IsDuplicateCourseAsync(string courseName, string level)
+        public async Task<bool> IsDuplicateCourseAsync(string courseName, string level, int? excludeCourseId = null)
         {
             return await _context.Courses.AnyAsync(c =>
                 c.CourseName.ToLower() == courseName.ToLower() &&
-                c.Level.ToLower() == level.ToLower());
+                c.Level.ToLower() == level.ToLower() &&
+                (!excludeCourseId.HasValue || c.CourseId != excludeCourseId.Value));
         }
-      
+        public async Task<Course> GetCourseByNameAndLevelAsync(string courseName, string level)
+        {
+            return await _context.Courses
+                                 .FirstOrDefaultAsync(c => c.CourseName.ToLower() == courseName.ToLower() && c.Level.ToLower() == level.ToLower());
+        }
+
+
 
 
     }

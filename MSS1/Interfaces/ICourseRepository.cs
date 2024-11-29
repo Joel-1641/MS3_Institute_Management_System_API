@@ -1,4 +1,5 @@
-﻿using MSS1.Entities;
+﻿using MSS1.DTOs.ResponseDTOs;
+using MSS1.Entities;
 
 namespace MSS1.Interfaces
 {
@@ -9,6 +10,7 @@ namespace MSS1.Interfaces
         Task<Course> AddCourseAsync(Course course);
         Task<Course> UpdateCourseAsync(Course course);
         Task<bool> DeleteCourseAsync(int courseId);
-        Task<bool> IsDuplicateCourseAsync(string courseName, string level);
+        Task<bool> IsDuplicateCourseAsync(string courseName, string level, int? excludeCourseId = null);
+        Task<Course> GetCourseByNameAndLevelAsync(string courseName, string level);
     }
 }

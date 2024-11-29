@@ -76,7 +76,7 @@ namespace MSS1.Controllers
             try
             {
                 var response = await _courseService.AddCourseAsync(request);
-                return CreatedAtAction(nameof(GetCourseById), new { courseId = response.CourseId }, response);
+                return CreatedAtAction(nameof(AddCourse), new { courseId = response.CourseId }, response);
             }
             catch (ArgumentException ex)
             {
@@ -84,9 +84,10 @@ namespace MSS1.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while adding the course." });
             }
         }
+
 
         [HttpGet("courses")]
         public async Task<IActionResult> GetAllCourses()
@@ -110,7 +111,6 @@ namespace MSS1.Controllers
         {
             try
             {
-                // Ensure the CourseId in the URL matches the one in the request body (optional check for consistency)
                 if (courseId != request.CourseId)
                 {
                     return BadRequest(new { Message = "CourseId in the URL does not match the one in the request body." });
@@ -123,11 +123,16 @@ namespace MSS1.Controllers
             {
                 return BadRequest(new { Message = ex.Message });
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = ex.Message });
+                return StatusCode(500, new { Message = "An error occurred while updating the course." });
             }
         }
+
 
 
         [HttpDelete("courses/{courseId}")]
@@ -140,6 +145,23 @@ namespace MSS1.Controllers
             return NoContent();
         }
 
+        [HttpGet("courses/bynamelevel")]
+        public async Task<IActionResult> GetCourseByNameAndLevel([FromQuery] string courseName, [FromQuery] string level)
+        {
+            try
+            {
+                var response = await _courseService.GetCourseByNameAndLevelAsync(courseName, level);
+                return Ok(response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving the course." });
+            }
+        }
 
 
 
