@@ -162,7 +162,50 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred while retrieving the course." });
             }
         }
+        [HttpGet("lecturers")]
+        public async Task<IActionResult> GetAllLecturers()
+        {
+            var lecturers = await _userService.GetAllLecturersAsync();
+            return Ok(lecturers);
+        }
 
+        [HttpGet("lecturers/{id}")]
+        public async Task<IActionResult> GetLecturerById(int id)
+        {
+            var lecturer = await _userService.GetLecturerByIdAsync(id);
+            if (lecturer == null)
+                return NotFound(new { Message = "Lecturer not found." });
+
+            return Ok(lecturer);
+        }
+        [HttpDelete("lecturers/{id}")]
+        public async Task<IActionResult> DeleteLecturerById(int id)
+        {
+            try
+            {
+                await _userService.DeleteLecturerAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+
+        [HttpPut("lecturers/{id}")]
+        public async Task<IActionResult> UpdateLecturer(int id, [FromBody] UpdateLecturerRequestDTO request)
+        {
+            try
+            {
+                await _userService.UpdateLecturerAsync(id, request);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
 
 
 

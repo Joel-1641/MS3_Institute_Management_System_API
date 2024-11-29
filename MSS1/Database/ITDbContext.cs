@@ -71,9 +71,17 @@ namespace MSS1.Database
             // Unique constraints
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>().HasIndex(u => u.NICNumber).IsUnique();
-        }
 
+            modelBuilder.Entity<Lecturer>()
+              .HasOne(l => l.User) // A Lecturer has one User
+              .WithOne(u => u.Lecturer) // A User has one Lecturer
+              .HasForeignKey<Lecturer>(l => l.UserId) // Foreign key is UserId in Lecturer
+              .OnDelete(DeleteBehavior.Cascade); // Enable cascade deletion
+        }
        
+          
+        
+
 
 
     }

@@ -4,9 +4,9 @@ namespace MSS1.Interfaces
 {
     public interface ILecturerRepository
     {
-        //Task AddLecturerAsync(Lecturer lecturer);
-        Task<IEnumerable<Lecturer>> GetAllLecturersAsync();
-       // Task<Lecturer> GetLecturerByIdAsync(int lecturerId);
-       // Task<List<LecturerCourse>> GetCoursesByLecturerAsync(int lecturerId);
+        Task<List<Lecturer>> GetAllLecturersAsync();
+        Task<Lecturer> GetLecturerByIdAsync(int lecturerId);
+        Task DeleteLecturerAsync(int lecturerId);
+        Task UpdateLecturerAsync(Lecturer lecturer);
     }
 }

@@ -43,15 +43,7 @@ namespace MSS1.Repository
             return lecturer;
 
         }
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await _context.Users
-                .Include(u => u.Role)        // Include the Role entity for each user
-                .Include(u => u.Student)     // Include the Student entity for users with role Student
-                .Include(u => u.Lecturer)    // Include the Lecturer entity for users with role Lecturer
-                .ToListAsync();              // Fetch the results asynchronously
-        }
-
+        
 
 
 

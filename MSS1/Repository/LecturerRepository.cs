@@ -19,36 +19,45 @@ namespace MSS1.Repository
         //    await _context.Lecturers.AddAsync(lecturer);
         //    await _context.SaveChangesAsync();
         //}
-        public async Task<IEnumerable<Lecturer>> GetAllLecturersAsync()
+        public async Task<List<Lecturer>> GetAllLecturersAsync()
         {
             return await _context.Lecturers
                 .Include(l => l.User) // Include User details
-                .Include(l => l.Courses) // Include courses the lecturer teaches
+                .ThenInclude(u => u.Role) // Include Role details
+                .Include(l => l.Courses) // Include related Courses
                 .ToListAsync();
         }
 
 
-        //public async Task<Lecturer> GetLecturerByIdAsync(int lecturerId)
-        //{
-        //    return await _context.Lecturers
-        //        .Include(l => l.User)
-        //        .Include(l => l.Courses)
-        //        .FirstOrDefaultAsync(l => l.LecturerId == lecturerId);
-        //}
+        public async Task<Lecturer> GetLecturerByIdAsync(int lecturerId)
+        {
+            return await _context.Lecturers
+                .Include(l => l.User)
+                .Include(l => l.Courses) // Include Courses
+                .FirstOrDefaultAsync(l => l.LecturerId == lecturerId);
+        }
 
-        //public async Task<List<LecturerCourse>> GetCoursesByLecturerAsync(int lecturerId)
-        //{
-        //    var lecturer = await _context.Lecturers
-        //        .Include(l => l.Courses)
-        //        .FirstOrDefaultAsync(l => l.LecturerId == lecturerId);
+        public async Task DeleteLecturerAsync(int lecturerId)
+        {
+            var lecturer = await _context.Lecturers
+                .Include(l => l.User) // Include the User entity
+                .FirstOrDefaultAsync(l => l.LecturerId == lecturerId);
 
-        //    if (lecturer == null)
-        //    {
-        //        throw new KeyNotFoundException("Lecturer not found.");
-        //    }
+            if (lecturer == null)
+                throw new ArgumentException("Lecturer not found.");
 
-        //    return lecturer.Courses.ToList();
-        //}
+            _context.Users.Remove(lecturer.User); // Remove the User
+            _context.Lecturers.Remove(lecturer); // Remove the Lecturer
+            await _context.SaveChangesAsync();
+        }
+
+
+
+        public async Task UpdateLecturerAsync(Lecturer lecturer)
+        {
+            _context.Lecturers.Update(lecturer);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }
