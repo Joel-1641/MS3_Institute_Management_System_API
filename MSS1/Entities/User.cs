@@ -16,7 +16,7 @@ namespace MSS1.Entities
         public DateTime DateOfBirth { get; set; } // Date of Birth
         public string Gender { get; set; } // Male, Female, Other
         public string Address { get; set; } // Address
-        public int MobileNumber { get; set; } // Mobile Number
+        public long MobileNumber { get; set; } // Mobile Number
         public int RoleId { get; set; } // Foreign Key to Role
         public string ProfilePicture { get; set; } // Profile picture URL or file path
 

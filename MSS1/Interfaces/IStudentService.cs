@@ -6,6 +6,10 @@ namespace MSS1.Interfaces
 {
     public interface IStudentService
     {
+        Task<List<StudentResponseDTO>> GetAllStudentsAsync();
+        Task<StudentResponseDTO> GetStudentByIdAsync(int studentId);
+        Task DeleteStudentAsync(int studentId);
+        Task<StudentResponseDTO> UpdateStudentAsync(int studentId, UpdateStudentRequestDTO request);
        // Task<Student> GetStudentProfile(int studentId);
        // Task UpdateStudentProfile(int studentId, UpdateStudentRequestDTO request);
        // Task<List<Course>> GetStudentCourses(int studentId);

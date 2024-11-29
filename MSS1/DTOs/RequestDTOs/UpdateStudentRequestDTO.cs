@@ -3,6 +3,11 @@
     public class UpdateStudentRequestDTO
     {
         public string FullName { get; set; }
-        public string ProfilePicture { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public long MobileNumber { get; set; }
+        public string Gender { get; set; }
+        public decimal RegistrationFee { get; set; }
+        public bool IsRegistrationFeePaid { get; set; }
     }
 }

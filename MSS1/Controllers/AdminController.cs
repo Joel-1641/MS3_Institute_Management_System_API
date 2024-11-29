@@ -13,11 +13,13 @@ namespace MSS1.Controllers
     {
         private readonly IUserService _userService;
         private readonly ICourseService _courseService;
+        private readonly IStudentService _studentService;
 
-        public AdminController(IUserService userService,ICourseService courseService)
+        public AdminController(IUserService userService,ICourseService courseService, IStudentService studentService)
         {
             _userService = userService;
             _courseService = courseService;
+            _studentService = studentService;
         }
 
     
@@ -207,7 +209,62 @@ namespace MSS1.Controllers
             }
         }
 
+        // Get All Students
+        [HttpGet("students")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            var students = await _studentService.GetAllStudentsAsync();
+            return Ok(students);
+        }
 
+        // Get Student By Id
+        [HttpGet("students/{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            try
+            {
+                var student = await _studentService.GetStudentByIdAsync(id);
+                return Ok(student);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        // Delete Student By Id
+        [HttpDelete("students/{id}")]
+        public async Task<IActionResult> DeleteStudentById(int id)
+        {
+            try
+            {
+                await _studentService.DeleteStudentAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        // Update Student By Id
+        [HttpPut("students/{id}")]
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] UpdateStudentRequestDTO request)
+        {
+            try
+            {
+                var updatedStudent = await _studentService.UpdateStudentAsync(id, request);
+                return Ok(updatedStudent);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
 
     }
 }

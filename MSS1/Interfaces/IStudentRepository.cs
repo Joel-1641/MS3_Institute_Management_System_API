@@ -6,6 +6,9 @@ namespace MSS1.Interfaces
     {
         Task AddStudentAsync(Student student);
         Task<Student> GetStudentByIdAsync(int studentId);
+        Task<List<Student>> GetAllStudentsAsync();
+        Task<Student> UpdateStudentAsync(Student student);
+        Task DeleteStudentAsync(int studentId);
         //Task<Student> GetStudentProfile(int studentId);
         //Task UpdateStudentProfile(int studentId, Student student);
         //Task<List<Course>> GetStudentCourses(int studentId);

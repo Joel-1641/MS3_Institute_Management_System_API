@@ -10,7 +10,7 @@
         public string NICNumber { get; set; } // National Identity Card Number
         public string Gender { get; set; } // Male, Female, Other
         public string Address { get; set; } // Address
-        public int MobileNumber { get; set; } // Mobile Number
+        public long MobileNumber { get; set; } // Mobile Number
     }
 
     
