@@ -117,5 +117,17 @@ namespace MSS1.Services
         {
             return await _studentCourseRepository.GetStudentNICByIdAsync(studentId);
         }
+        // StudentCourseService.cs
+
+        public async Task<Student> GetStudentByNICAsync(string nic)
+        {
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+            return student;
+        }
+
     }
 }

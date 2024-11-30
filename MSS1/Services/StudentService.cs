@@ -21,16 +21,17 @@ namespace MSS1.Services
             var students = await _repository.GetAllStudentsAsync();
             return students.Select(s => new StudentResponseDTO
             {
-                
                 FullName = s.User.FullName,
                 Email = s.User.Email,
                 Address = s.User.Address,
                 MobileNumber = s.User.MobileNumber,
                 Gender = s.User.Gender,
                 RegistrationFee = s.RegistrationFee,
-                IsRegistrationFeePaid = s.IsRegistrationFeePaid
+                IsRegistrationFeePaid = s.IsRegistrationFeePaid,
+                NICNumber = s.User.NICNumber // Include NICNumber here
             }).ToList();
         }
+
 
         // Get Student By Id
         public async Task<StudentResponseDTO> GetStudentByIdAsync(int studentId)

@@ -209,13 +209,14 @@ namespace MSS1.Controllers
             }
         }
 
-        // Get All Students
+       
         [HttpGet("students")]
         public async Task<IActionResult> GetAllStudents()
         {
             var students = await _studentService.GetAllStudentsAsync();
             return Ok(students);
         }
+
 
         // Get Student By Id
         [HttpGet("students/{id}")]

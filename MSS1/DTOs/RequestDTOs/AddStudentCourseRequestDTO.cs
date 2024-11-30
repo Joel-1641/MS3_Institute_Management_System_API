@@ -6,5 +6,7 @@
         public List<int> CourseIds { get; set; }
         public string NIC { get; set; }
 
+         
+
     }
 }
