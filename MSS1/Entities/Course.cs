@@ -21,6 +21,7 @@ namespace MSS1.Entities
 
         // Navigation Properties
         public ICollection<Student> Students { get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; }
     }
 
 }

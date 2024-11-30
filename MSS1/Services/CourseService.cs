@@ -113,7 +113,16 @@ namespace MSS1.Services
                 Description = course.Description
             };
         }
-       
+        public async Task<IEnumerable<CourseNameDTO>> GetAllCourseNamesAsync()
+        {
+            var courses = await _courseRepository.GetAllCoursesAsync();
+            return courses.Select(c => new CourseNameDTO
+            {
+                CourseId = c.CourseId,
+                CourseName = c.CourseName
+            }).ToList();
+        }
+
 
     }
 }

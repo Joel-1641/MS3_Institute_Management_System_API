@@ -14,7 +14,8 @@ namespace MSS1.Entities
 
         // Navigation Properties
         public User User { get; set; }
-        public ICollection<Course> Courses { get; set; }
+       // public ICollection<Course> Courses { get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; }
     }
 
 

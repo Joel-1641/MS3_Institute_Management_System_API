@@ -23,6 +23,7 @@ namespace MSS1.Database
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<LecturerCourse> LecturerCourses { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
         //public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -49,14 +50,14 @@ namespace MSS1.Database
                 .HasPrecision(18, 2); // Precision 18, scale 2 (example)
 
             // Configure many-to-many relationship
-            modelBuilder.Entity<Student>()
-                .HasMany(s => s.Courses)
-                .WithMany(c => c.Students)
-                .UsingEntity<StudentCourse>(
-                    j => j.HasOne(sc => sc.Course).WithMany().HasForeignKey(sc => sc.CourseId),
-                    j => j.HasOne(sc => sc.Student).WithMany().HasForeignKey(sc => sc.StudentId),
-                    j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
-                );
+            //modelBuilder.Entity<Student>()
+            //    .HasMany(s => s.Courses)
+            //    .WithMany(c => c.Students)
+            //    .UsingEntity<StudentCourse>(
+            //        j => j.HasOne(sc => sc.Course).WithMany().HasForeignKey(sc => sc.CourseId),
+            //        j => j.HasOne(sc => sc.Student).WithMany().HasForeignKey(sc => sc.StudentId),
+            //        j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
+            //    );
             modelBuilder.Entity<Role>().HasData(
         new Role { RoleId = 1, RoleName = "Admin" },
         new Role { RoleId = 2, RoleName = "Student" },
@@ -77,6 +78,20 @@ namespace MSS1.Database
               .WithOne(u => u.Lecturer) // A User has one Lecturer
               .HasForeignKey<Lecturer>(l => l.UserId) // Foreign key is UserId in Lecturer
               .OnDelete(DeleteBehavior.Cascade); // Enable cascade deletion
+
+            modelBuilder.Entity<StudentCourse>()
+            .HasKey(sc => new { sc.StudentId, sc.CourseId });
+
+            // Configure relationships
+            modelBuilder.Entity<StudentCourse>()
+                .HasOne(sc => sc.Student)
+                .WithMany(s => s.StudentCourses)
+                .HasForeignKey(sc => sc.StudentId);
+
+            modelBuilder.Entity<StudentCourse>()
+                .HasOne(sc => sc.Course)
+                .WithMany(c => c.StudentCourses)
+                .HasForeignKey(sc => sc.CourseId);
         }
        
           
