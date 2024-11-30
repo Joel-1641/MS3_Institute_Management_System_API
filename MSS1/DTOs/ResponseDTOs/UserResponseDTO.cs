@@ -11,6 +11,7 @@
         public string Gender { get; set; } // Male, Female, Other
         public string Address { get; set; } // Address
         public long MobileNumber { get; set; } // Mobile Number
+        public DateTime DateOfBirth { get; set; } // Date of Birth
     }
 
     

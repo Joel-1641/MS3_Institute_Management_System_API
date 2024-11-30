@@ -2,11 +2,13 @@
 {
     public class AddStudentCourseRequestDTO
     {
-      // public int StudentId { get; set; }
-        public List<int> CourseIds { get; set; }
+       
         public string NIC { get; set; }
 
-         
+        
+        public List<CourseSelectionDTO> Courses { get; set; }
+
+
 
     }
 }

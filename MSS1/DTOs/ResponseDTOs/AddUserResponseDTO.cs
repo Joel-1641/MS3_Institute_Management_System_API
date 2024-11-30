@@ -7,6 +7,8 @@
         public string Email { get; set; }
         public string RoleName { get; set; }
         public string ProfilePicture { get; set; }
+
+        public DateTime DateOfBirth { get; set; } // Date of Birth
     }
 
 

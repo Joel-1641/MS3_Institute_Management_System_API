@@ -95,6 +95,17 @@ namespace MSS1.Repository
                 .ToListAsync();
         }
 
+        public async Task<int?> GetCourseIdByNameAndLevelAsync(string courseName, string level)
+        {
+            var course = await _context.Courses
+                .FirstOrDefaultAsync(c => c.CourseName == courseName && c.Level == level);
+            return course?.CourseId;
+        }
+        public async Task<bool> IsStudentEnrolledInCourseAsync(int studentId, int courseId)
+        {
+            return await _context.StudentCourses
+                .AnyAsync(sc => sc.StudentId == studentId && sc.CourseId == courseId);
+        }
 
 
     }

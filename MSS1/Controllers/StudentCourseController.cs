@@ -29,9 +29,10 @@ namespace MSS1.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message); // Return detailed error messages for duplicates
             }
         }
+
 
 
         [HttpGet("student/{studentId}/courses")]
@@ -48,12 +49,12 @@ namespace MSS1.Controllers
             return Ok(studentCourses);
         }
 
-        [HttpGet("student/{studentId}")]
-        public async Task<IActionResult> GetStudentWithCoursesById(int studentId)
-        {
-            var studentCourses = await _studentCourseService.GetStudentWithCoursesByIdAsync(studentId);
-            return Ok(studentCourses);
-        }
+        //[HttpGet("student/{studentId}")]
+        //public async Task<IActionResult> GetStudentWithCoursesById(int studentId)
+        //{
+        //    var studentCourses = await _studentCourseService.GetStudentWithCoursesByIdAsync(studentId);
+        //    return Ok(studentCourses);
+        //}
 
         [HttpGet("course/{courseId}/students-count")]
         public async Task<IActionResult> GetStudentCountForCourse(int courseId)
@@ -82,6 +83,20 @@ namespace MSS1.Controllers
                 return NotFound(ex.Message);
             }
         }
+        [HttpGet("student/nic/{nic}/courses")]
+        public async Task<IActionResult> GetCoursesByNIC(string nic)
+        {
+            try
+            {
+                var courses = await _studentCourseService.GetCoursesByNICAsync(nic);
+                return Ok(courses);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
     }
 }

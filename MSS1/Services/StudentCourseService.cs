@@ -24,17 +24,49 @@ namespace MSS1.Services
                 throw new KeyNotFoundException($"No student found with NIC {request.NIC}.");
             }
 
-            // Create student-course entries
-            var studentCourses = request.CourseIds.Select(courseId => new StudentCourse
+            var errorMessages = new List<string>();
+            var studentCourses = new List<StudentCourse>();
+
+            foreach (var course in request.Courses)
             {
-                StudentId = student.StudentId,  // Use the StudentId from the found student
-                CourseId = courseId
-            });
+                // Get the CourseId by CourseName and Level
+                var courseId = await _studentCourseRepository.GetCourseIdByNameAndLevelAsync(course.CourseName, course.Level);
 
-            // Add the courses for the student
-            await _studentCourseRepository.AddStudentCoursesAsync(studentCourses);
+                if (courseId == null)
+                {
+                    errorMessages.Add($"No course found with Name: {course.CourseName} and Level: {course.Level}.");
+                    continue;
+                }
+
+                // Check if the student is already enrolled in the course
+                var alreadyEnrolled = await _studentCourseRepository.IsStudentEnrolledInCourseAsync(student.StudentId, courseId.Value);
+
+                if (alreadyEnrolled)
+                {
+                    errorMessages.Add($"Student is already enrolled in Course: {course.CourseName} with Level: {course.Level}.");
+                    continue;
+                }
+
+                // Add to the list if not enrolled
+                studentCourses.Add(new StudentCourse
+                {
+                    StudentId = student.StudentId,
+                    CourseId = courseId.Value
+                });
+            }
+
+            // Save new courses
+            if (studentCourses.Any())
+            {
+                await _studentCourseRepository.AddStudentCoursesAsync(studentCourses);
+            }
+
+            // Handle errors
+            if (errorMessages.Any())
+            {
+                throw new InvalidOperationException(string.Join("; ", errorMessages));
+            }
         }
-
 
         public async Task<IEnumerable<CourseResponseDTO>> GetCoursesByStudentIdAsync(int studentId)
         {
@@ -109,7 +141,9 @@ namespace MSS1.Services
             {
                 CourseId = c.CourseId,
                 CourseName = c.CourseName,
-                Description = c.Description
+                Description = c.Description,
+                Level = c.Level,
+                CourseFee = c.CourseFee
             });
         }
 
@@ -128,6 +162,29 @@ namespace MSS1.Services
             }
             return student;
         }
+        public async Task<IEnumerable<CourseResponseDTO>> GetCoursesByNICAsync(string nic)
+        {
+            // Get the student using the NIC
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            // Get the courses associated with the student
+            var courses = await _studentCourseRepository.GetCoursesByStudentIdAsync(student.StudentId);
+
+            // Map to DTO
+            return courses.Select(c => new CourseResponseDTO
+            {
+                CourseId = c.CourseId,
+                CourseName = c.CourseName,
+                Level = c.Level,
+                CourseFee = c.CourseFee,
+                Description = c.Description
+            });
+        }
+
 
     }
 }

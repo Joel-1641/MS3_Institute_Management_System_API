@@ -14,6 +14,8 @@ namespace MSS1.Interfaces
         Task<IEnumerable<Course>> GetAllCoursesAsync();
         Task<IEnumerable<StudentCourse>> GetStudentCoursesByStudentIdAsync(int studentId);
         Task<Student> GetStudentByNICAsync(string nic);
+        Task<int?> GetCourseIdByNameAndLevelAsync(string courseName, string level);
+        Task<bool> IsStudentEnrolledInCourseAsync(int studentId, int courseId);
         //Task<string> GetStudentNICByIdAsync(int studentId);
     }
 }
