@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MSS1.Database;
-using System.Text.Json.Serialization;
 using MSS1.Interfaces;
 using MSS1.Repository;
-using MSS1.Services;
 using MSS1.Repositories;
-//using AuthenticationService = MSS1.Services.AuthenticationService;
+using MSS1.Services;
+using System.Text;
+using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -14,27 +15,57 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Ensure the configuration includes appsettings.json
+        builder.Configuration
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
+
         // Add services to the container.
         builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
                 // Enable reference handling to prevent circular reference issues
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                // Optionally, increase max depth (default is 32)
-                options.JsonSerializerOptions.MaxDepth = 64;
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        // Add SwaggerGen
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // Add DbContext with SQL Server connection string
+        // Read JWT settings from appsettings.json
+        var jwtSettings = builder.Configuration.GetSection("Jwt");
+        var key = jwtSettings["Key"];
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new ArgumentNullException("JWT Key is not configured in appsettings.json");
+        }
+        var keyBytes = Encoding.ASCII.GetBytes(key);
+
+        // Register the JWT key as a singleton so it can be injected into services
+        builder.Services.AddSingleton(key); // Register the JWT key string
+
+        // Add JWT Authentication
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(keyBytes)  // Use the key bytes here
+                };
+            });
+
+        // Register DbContext with SQL Server connection string
         builder.Services.AddDbContext<ITDbContext>(opt =>
             opt.UseSqlServer(builder.Configuration.GetConnectionString("ITDBConnection"))
         );
-        builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-        builder.Services.AddScoped<IAuthenticServices, AuthenticService>();
-        builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+
+        // Register Scoped Services
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -45,23 +76,10 @@ internal class Program
         builder.Services.AddScoped<IContactUsService, ContactUsService>();
         builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
         builder.Services.AddScoped<ILecturerRepository, LecturerRepository>();
-        builder.Services.AddScoped<ILecturerService,LecturerService>();
-        builder.Services.AddScoped<IStudentCourseRepository,StudentCourseRepository>();
-        builder.Services.AddScoped<IStudentCourseService,StudentCourseService>();
-
-
-        //builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IAuthenticationService, AuthenticationService>();
-
+        builder.Services.AddScoped<ILecturerService, LecturerService>();
+        builder.Services.AddScoped<IStudentCourseRepository, StudentCourseRepository>();
+        builder.Services.AddScoped<IStudentCourseService, StudentCourseService>();
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-        builder.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(policy =>
-            {
-                policy.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-            });
-        });
 
         var app = builder.Build();
 
@@ -73,8 +91,22 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+
+        // Enable authentication middleware
+        app.UseAuthentication();
+
+        // Enable authorization middleware
         app.UseAuthorization();
-        app.UseCors();
+
+        // Configure CORS
+        app.UseCors(policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+
+        // Map controllers
         app.MapControllers();
 
         app.Run();

@@ -1,9 +1,12 @@
-﻿using MSS1.DTOs.RequestDTOs;
+﻿using Microsoft.IdentityModel.Tokens;
+using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
 using MSS1.Repositories;
 using MSS1.Repository;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,13 +18,15 @@ namespace MSS1.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ILecturerRepository _lecturerRepository;
+        private readonly string _jwtKey;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository, string jwtKey)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _studentRepository = studentRepository;
             _lecturerRepository = lecturerRepository;
+            _jwtKey = jwtKey;
         }
 
 
@@ -110,6 +115,11 @@ namespace MSS1.Services
             }
             return Convert.ToBase64String(saltBytes);
         }
+        private bool VerifyPassword(string password, string hashedPassword, string salt)
+        {
+            var hashedInputPassword = HashPassword(password, salt);
+            return hashedInputPassword == hashedPassword;
+        }
 
         private string HashPassword(string password, string salt)
         {
@@ -180,6 +190,51 @@ namespace MSS1.Services
             lecturer.Courses = request.Courses.Select(course => new LecturerCourse { CourseName = course }).ToList();
 
             await _lecturerRepository.UpdateLecturerAsync(lecturer);
+        }
+        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO request)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(request.Email);
+            if (user == null || !VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
+                throw new ArgumentException("Invalid email or password.");
+
+            // Generate JWT Token
+            var token = GenerateJwtToken(user);
+
+            // Get the role name
+            var role = await _roleRepository.GetRoleByIdAsync(user.RoleId);
+
+            return new LoginResponseDTO
+            {
+                Token = token,
+                UserId = user.UserId,
+                FullName = user.FullName,
+                RoleName = role?.RoleName
+            };
+        }
+
+        // Logout API - No specific implementation, client-side can handle token invalidation
+        public Task LogoutAsync() => Task.CompletedTask;
+
+        private string GenerateJwtToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role?.RoleName),
+                new Claim("UserId", user.UserId.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: "YourIssuer",
+                audience: "YourAudience",
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
 

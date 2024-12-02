@@ -12,7 +12,10 @@ namespace MSS1.Interfaces
      
         Task<Student> AddStudentAsync(Student student);
         Task<Lecturer> AddLecturerAsync(Lecturer lecturer);
-      
+        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByEmailLoginAsync(string email);
+
+
 
 
     }

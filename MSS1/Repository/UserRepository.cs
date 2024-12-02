@@ -84,5 +84,30 @@ namespace MSS1.Repository
         //        .Include(u => u.Lecturer)   // Include Lecturer entity (if applicable)
         //        .FirstOrDefaultAsync(u => u.UserId == userId); // Fetch user by ID
         //}
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            // Validate the email
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+            }
+
+            // Load all users into memory and then filter (client-side evaluation)
+            var users = await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.Student)
+                .Include(u => u.Lecturer)
+                .ToListAsync();
+
+            return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+        public async Task<User> GetUserByEmailLoginAsync(string email)
+        {
+            return await _context.Users
+                .Include(u => u.Role)  // Include Role entity
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+
     }
 }

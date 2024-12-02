@@ -10,5 +10,7 @@ namespace MSS1.Interfaces
         Task DeleteLecturerAsync(int lecturerId);
         Task UpdateLecturerAsync(int lecturerId, UpdateLecturerRequestDTO request);
         Task<AddUserResponseDTO> AddUserAsync(AddUserRequestDTO request);
+        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO request);
+        Task LogoutAsync() => Task.CompletedTask;
     }
 }

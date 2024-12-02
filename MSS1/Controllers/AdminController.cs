@@ -266,6 +266,32 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = ex.Message });
             }
         }
+        // Login API for both Student and Lecturer
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequestDTO loginRequest)
+        {
+            if (loginRequest == null)
+                return BadRequest("Invalid login request.");
+
+            try
+            {
+                var loginResponse = await _userService.LoginAsync(loginRequest);
+                return Ok(loginResponse); // Return the token and user details
+            }
+            catch (ArgumentException ex)
+            {
+                return Unauthorized(new { message = ex.Message }); // Invalid login credentials
+            }
+        }
+
+        // Logout API
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            // Client-side should handle token invalidation by removing it from storage
+            _userService.LogoutAsync();
+            return Ok(new { message = "Logged out successfully." });
+        }
 
     }
 }
