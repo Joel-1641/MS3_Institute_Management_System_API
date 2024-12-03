@@ -21,6 +21,7 @@ namespace MSS1.Services
             var students = await _repository.GetAllStudentsAsync();
             return students.Select(s => new StudentResponseDTO
             {
+                StudentId = s.StudentId,
                 FullName = s.User.FullName,
                 Email = s.User.Email,
                 Address = s.User.Address,
@@ -28,7 +29,9 @@ namespace MSS1.Services
                 Gender = s.User.Gender,
                 RegistrationFee = s.RegistrationFee,
                 IsRegistrationFeePaid = s.IsRegistrationFeePaid,
-                NICNumber = s.User.NICNumber // Include NICNumber here
+                NICNumber = s.User.NICNumber,
+
+                // Include NICNumber here
             }).ToList();
         }
 
