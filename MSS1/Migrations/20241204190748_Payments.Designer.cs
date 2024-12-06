@@ -4,6 +4,7 @@ using MSS1.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSS1.Migrations
 {
     [DbContext(typeof(ITDbContext))]
-    partial class ITDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241204190748_Payments")]
+    partial class Payments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,9 +121,6 @@ namespace MSS1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
 
-                    b.Property<string>("CourseDuration")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CourseEndDate")
                         .HasColumnType("datetime2");
 
@@ -139,6 +139,9 @@ namespace MSS1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Duration")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Level")

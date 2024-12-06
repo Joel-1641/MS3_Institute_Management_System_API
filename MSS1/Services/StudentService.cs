@@ -30,6 +30,7 @@ namespace MSS1.Services
                 RegistrationFee = s.RegistrationFee,
                 IsRegistrationFeePaid = s.IsRegistrationFeePaid,
                 NICNumber = s.User.NICNumber,
+                DateOfBirth = s.User.DateOfBirth,
 
                 // Include NICNumber here
             }).ToList();
@@ -52,7 +53,9 @@ namespace MSS1.Services
                 MobileNumber = student.User.MobileNumber,
                 Gender = student.User.Gender,
                 RegistrationFee = student.RegistrationFee,
-                IsRegistrationFeePaid = student.IsRegistrationFeePaid
+                IsRegistrationFeePaid = student.IsRegistrationFeePaid,
+                NICNumber = student.User.NICNumber,
+                DateOfBirth= student.User.DateOfBirth,
             };
         }
 
@@ -74,7 +77,9 @@ namespace MSS1.Services
                     Email = request.Email,
                     Address = request.Address,
                     MobileNumber = request.MobileNumber,
-                    Gender = request.Gender
+                    Gender = request.Gender,
+                    NICNumber = request.NICNumber,
+                    DateOfBirth= request.DateOfBirth,
                 },
                 RegistrationFee = request.RegistrationFee,
                 IsRegistrationFeePaid = request.IsRegistrationFeePaid
@@ -89,7 +94,9 @@ namespace MSS1.Services
                 MobileNumber = updatedStudent.User.MobileNumber,
                 Gender = updatedStudent.User.Gender,
                 RegistrationFee = updatedStudent.RegistrationFee,
-                IsRegistrationFeePaid = updatedStudent.IsRegistrationFeePaid
+                IsRegistrationFeePaid = updatedStudent.IsRegistrationFeePaid,
+                //DateOfBirth = updatedStudent.DateOfBirth
+
             };
         }
 

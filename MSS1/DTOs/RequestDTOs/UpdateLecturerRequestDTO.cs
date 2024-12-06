@@ -10,5 +10,6 @@
         public int MobileNumber { get; set; }
         public string ProfilePicture { get; set; }
         public List<string> Courses { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

@@ -58,6 +58,10 @@ namespace MSS1.Repository
             existingCourse.Level = course.Level;
             existingCourse.CourseFee = course.CourseFee;
             existingCourse.Description = course.Description;
+            existingCourse.CourseDuration = course.CourseDuration;
+            existingCourse.CourseImg = course.CourseImg;
+            existingCourse.CourseStartDate = course.CourseStartDate;
+            existingCourse.CourseEndDate = course.CourseEndDate;
 
             await _context.SaveChangesAsync();
             return existingCourse;

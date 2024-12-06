@@ -24,7 +24,11 @@ namespace MSS1.Services
                 CourseName = c.CourseName,
                 Level = c.Level,
                 CourseFee = c.CourseFee,
-                Description = c.Description
+                Description = c.Description,
+                CourseImg = c.CourseImg,
+                CourseStartDate = c.CourseStartDate,
+                CourseEndDate = c.CourseEndDate,
+                CourseDuration = c.CourseDuration
             });
         }
 
@@ -39,7 +43,11 @@ namespace MSS1.Services
                 CourseName = course.CourseName,
                 Level = course.Level,
                 CourseFee = course.CourseFee,
-                Description = course.Description
+                Description = course.Description,
+                CourseImg = course.CourseImg,
+                CourseDuration = course.CourseDuration,
+                CourseStartDate = course.CourseStartDate,
+                CourseEndDate = course.CourseEndDate
             };
         }
 
@@ -50,7 +58,11 @@ namespace MSS1.Services
                 CourseName = request.CourseName,
                 Level = request.Level,
                 CourseFee = request.CourseFee,
-                Description = request.Description
+                Description = request.Description,
+                CourseImg = request.CourseImg,
+                CourseDuration = request.CourseDuration,
+                CourseStartDate = request.CourseStartDate,
+                CourseEndDate = request.CourseEndDate
             };
 
             var addedCourse = await _courseRepository.AddCourseAsync(course);
@@ -61,7 +73,11 @@ namespace MSS1.Services
                 CourseName = addedCourse.CourseName,
                 Level = addedCourse.Level,
                 CourseFee = addedCourse.CourseFee,
-                Description = addedCourse.Description
+                Description = addedCourse.Description,
+                CourseImg = addedCourse.CourseImg,
+                CourseDuration = addedCourse.CourseDuration,
+                CourseStartDate = addedCourse.CourseStartDate,
+                CourseEndDate = addedCourse.CourseEndDate
             };
         }
 
@@ -74,7 +90,11 @@ namespace MSS1.Services
                 CourseName = request.CourseName,
                 Level = request.Level,
                 CourseFee = request.CourseFee,
-                Description = request.Description
+                Description = request.Description,
+                CourseDuration = request.CourseDuration,
+                CourseImg = request.CourseImg,
+                CourseEndDate= request.CourseEndDate
+
             };
 
             var updatedCourse = await _courseRepository.UpdateCourseAsync(course);
@@ -85,7 +105,10 @@ namespace MSS1.Services
                 CourseName = updatedCourse.CourseName,
                 Level = updatedCourse.Level,
                 CourseFee = updatedCourse.CourseFee,
-                Description = updatedCourse.Description
+                Description = updatedCourse.Description,
+                CourseDuration = updatedCourse.CourseDuration,
+                CourseImg = updatedCourse.CourseImg,
+                CourseEndDate= updatedCourse.CourseEndDate
             };
         }
 
@@ -110,7 +133,10 @@ namespace MSS1.Services
                 CourseName = course.CourseName,
                 Level = course.Level,
                 CourseFee = course.CourseFee,
-                Description = course.Description
+                Description = course.Description,
+                CourseDuration = course.CourseDuration, 
+                CourseImg = course.CourseImg,
+                CourseEndDate = course.CourseEndDate,
             };
         }
         public async Task<IEnumerable<CourseNameDTO>> GetAllCourseNamesAsync()
@@ -119,7 +145,8 @@ namespace MSS1.Services
             return courses.Select(c => new CourseNameDTO
             {
                 CourseId = c.CourseId,
-                CourseName = c.CourseName
+                CourseName = c.CourseName,
+                Level = c.Level
             }).ToList();
         }
 

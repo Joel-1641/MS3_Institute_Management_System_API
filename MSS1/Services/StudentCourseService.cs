@@ -77,7 +77,10 @@ namespace MSS1.Services
                 CourseName = c.CourseName,
                 Level = c.Level,
                 CourseFee = c.CourseFee,
-                Description = c.Description
+                Description = c.Description,
+                CourseDuration =c.CourseDuration,
+                CourseStartDate =c.CourseStartDate,
+                CourseEndDate =c.CourseEndDate
             });
         }
 
@@ -94,7 +97,10 @@ namespace MSS1.Services
                     CourseName = c.CourseName,
                     Level = c.Level,
                     CourseFee = c.CourseFee,
-                    Description = c.Description
+                    Description = c.Description,
+                    CourseDuration = c.CourseDuration,
+                    CourseStartDate =c.CourseStartDate,
+                    CourseEndDate = c.CourseEndDate,
                 }).ToList()
             });
         }
@@ -123,7 +129,10 @@ namespace MSS1.Services
                     CourseName = sc.Course.CourseName,
                     Level = sc.Course.Level,
                     CourseFee = sc.Course.CourseFee,
-                    Description = sc.Course.Description
+                    Description = sc.Course.Description,
+                    CourseDuration = sc.Course.CourseDuration,
+                    CourseStartDate =sc.Course.CourseStartDate,
+                    CourseEndDate =sc.Course.CourseEndDate
                 }).ToList()
             };
         }
@@ -143,7 +152,10 @@ namespace MSS1.Services
                 CourseName = c.CourseName,
                 Description = c.Description,
                 Level = c.Level,
-                CourseFee = c.CourseFee
+                CourseFee = c.CourseFee,
+                CourseDuration = c.CourseDuration,
+                CourseStartDate =c.CourseStartDate,
+                CourseEndDate =c.CourseEndDate
             });
         }
 
@@ -181,7 +193,10 @@ namespace MSS1.Services
                 CourseName = c.CourseName,
                 Level = c.Level,
                 CourseFee = c.CourseFee,
-                Description = c.Description
+                Description = c.Description,
+                CourseDuration = c.CourseDuration,
+                CourseStartDate =c.CourseStartDate,
+                CourseEndDate = c.CourseEndDate
             });
         }
 

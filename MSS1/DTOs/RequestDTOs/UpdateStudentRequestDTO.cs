@@ -9,5 +9,7 @@
         public string Gender { get; set; }
         public decimal RegistrationFee { get; set; }
         public bool IsRegistrationFeePaid { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string NICNumber { get; set; }
     }
 }

@@ -143,8 +143,9 @@ namespace MSS1.Services
                 Gender = l.User.Gender,
                 Address = l.User.Address,
                 MobileNumber = l.User.MobileNumber,
+                DateOfBirth = l.User.DateOfBirth,
                 ProfilePicture = l.User.ProfilePicture,
-                RoleName = l.User.Role?.RoleName, // Map the RoleName here
+               // RoleName = l.User.Role?.RoleName, // Map the RoleName here
                 Courses = l.Courses.Select(c => c.CourseName).ToList()
             }).ToList();
         }
@@ -159,7 +160,7 @@ namespace MSS1.Services
                 UserId = lecturer.User.UserId,
                 FullName = lecturer.User.FullName,
                 Email = lecturer.User.Email,
-                RoleName = "Lecturer",
+                //RoleName = "Lecturer",
                 ProfilePicture = lecturer.User.ProfilePicture,
                 LecturerId = lecturer.LecturerId,
                 Courses = lecturer.Courses.Select(c => c.CourseName).ToList()
@@ -185,6 +186,7 @@ namespace MSS1.Services
             lecturer.User.Address = request.Address;
             lecturer.User.MobileNumber = request.MobileNumber;
             lecturer.User.ProfilePicture = request.ProfilePicture;
+            lecturer.User.DateOfBirth = request.DateOfBirth;
 
             // Update Courses
             lecturer.Courses = request.Courses.Select(course => new LecturerCourse { CourseName = course }).ToList();
