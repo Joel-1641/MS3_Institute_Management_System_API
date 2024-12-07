@@ -82,19 +82,19 @@ namespace MSS1.Services
         }
 
 
-        public async Task<CourseResponseDTO> UpdateCourseAsync(UpdateCourseRequestDTO request)
+        public async Task<CourseResponseDTO> UpdateCourseAsync(int courseId, UpdateCourseRequestDTO request)
         {
             var course = new Course
             {
-               // CourseId = request.CourseId,
+                CourseId = courseId, // Use the CourseId from the URL
                 CourseName = request.CourseName,
                 Level = request.Level,
                 CourseFee = request.CourseFee,
                 Description = request.Description,
                 CourseDuration = request.CourseDuration,
                 CourseImg = request.CourseImg,
-                CourseEndDate= request.CourseEndDate
-
+                CourseStartDate = request.CourseStartDate,
+                CourseEndDate = request.CourseEndDate
             };
 
             var updatedCourse = await _courseRepository.UpdateCourseAsync(course);
@@ -108,9 +108,11 @@ namespace MSS1.Services
                 Description = updatedCourse.Description,
                 CourseDuration = updatedCourse.CourseDuration,
                 CourseImg = updatedCourse.CourseImg,
-                CourseEndDate= updatedCourse.CourseEndDate
+                CourseStartDate = updatedCourse.CourseStartDate,
+                CourseEndDate = updatedCourse.CourseEndDate
             };
         }
+
 
 
 

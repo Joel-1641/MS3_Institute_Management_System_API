@@ -9,7 +9,7 @@ namespace MSS1.Interfaces
         Task<IEnumerable<CourseResponseDTO>> GetAllCoursesAsync();
         Task<CourseResponseDTO> GetCourseByIdAsync(int courseId);
         Task<CourseResponseDTO> AddCourseAsync(AddCourseRequestDTO request);
-        Task<CourseResponseDTO> UpdateCourseAsync(UpdateCourseRequestDTO request);
+        Task<CourseResponseDTO> UpdateCourseAsync(int courseId, UpdateCourseRequestDTO request);
         Task<bool> DeleteCourseAsync(int courseId);
         Task<CourseResponseDTO> GetCourseByNameAndLevelAsync(string courseName, string level);
         Task<IEnumerable<CourseNameDTO>> GetAllCourseNamesAsync();

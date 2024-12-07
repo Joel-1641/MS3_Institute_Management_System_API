@@ -14,12 +14,15 @@ namespace MSS1.Controllers
         private readonly IUserService _userService;
         private readonly ICourseService _courseService;
         private readonly IStudentService _studentService;
+        private readonly ILecturerService _lecturerService;
 
-        public AdminController(IUserService userService,ICourseService courseService, IStudentService studentService)
+
+        public AdminController(IUserService userService,ICourseService courseService, IStudentService studentService,ILecturerService lecturerService)
         {
             _userService = userService;
             _courseService = courseService;
             _studentService = studentService;
+            _lecturerService = lecturerService;
         }
 
     
@@ -109,16 +112,12 @@ namespace MSS1.Controllers
         }
 
         [HttpPut("courses/{courseId}")]
-        public async Task<IActionResult> UpdateCourse(int courseId, [FromBody] UpdateCourseRequestDTO request)
+        public async Task<IActionResult> UpdateCourseAsync(int courseId, [FromBody] UpdateCourseRequestDTO request)
         {
             try
             {
-                if (courseId != request.CourseId)
-                {
-                    return BadRequest(new { Message = "CourseId in the URL does not match the one in the request body." });
-                }
-
-                var response = await _courseService.UpdateCourseAsync(request);
+                // Pass the CourseId explicitly to the service
+                var response = await _courseService.UpdateCourseAsync(courseId, request);
                 return Ok(response);
             }
             catch (ArgumentException ex)
@@ -134,6 +133,7 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred while updating the course." });
             }
         }
+
 
 
 
@@ -322,6 +322,5 @@ namespace MSS1.Controllers
             _userService.LogoutAsync();
             return Ok(new { message = "Logged out successfully." });
         }
-
     }
 }
