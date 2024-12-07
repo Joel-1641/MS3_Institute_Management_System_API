@@ -36,6 +36,22 @@ namespace MSS1.Repository
                 .FirstOrDefaultAsync(s => s.StudentId == studentId);
         }
 
+        //Get Student By NIC
+        public async Task<Student> GetStudentByNICNumberAsync(string nicNumber)
+        {
+            return await _context.Students
+                .Include(s => s.User) // Include User details
+                .FirstOrDefaultAsync(s => s.User.NICNumber == nicNumber);
+        }
+
+
+
+
+
+
+
+
+
         // Delete Student By Id
         public async Task DeleteStudentAsync(int studentId)
         {

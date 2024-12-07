@@ -17,11 +17,7 @@ namespace MSS1.Repository
             _context = context;
         }
 
-        /// <summary>
-        /// Adds a new user to the database.
-        /// </summary>
-        /// <param name="user">The user entity to be added.</param>
-        /// <returns>The added user entity.</returns>
+       
         public async Task<User> AddUserAsync(User user)
         {
             await _context.Users.AddAsync(user); // Add the base User entity
@@ -43,16 +39,6 @@ namespace MSS1.Repository
             return lecturer;
 
         }
-        
-
-
-
-
-        /// <summary>
-        /// Checks if a NIC already exists in the database.
-        /// </summary>
-        /// <param name="nicNumber">The NIC number to be checked.</param>
-        /// <returns>True if the NIC exists; otherwise, false.</returns>
         public async Task<bool> IsNICExistsAsync(string nicNumber)
         {
             return await _context.Users.AnyAsync(u => u.NICNumber == nicNumber);
@@ -64,26 +50,6 @@ namespace MSS1.Repository
         }
 
 
-        /// <summary>
-        /// Checks if an email already exists in the database.
-        /// </summary>
-        /// <param name="email">The email to be checked.</param>
-        /// <returns>True if the email exists; otherwise, false.</returns>
-
-
-        /// <summary>
-        /// Gets a user by their ID, including related entities.
-        /// </summary>
-        /// <param name="userId">The user ID to fetch the user.</param>
-        /// <returns>The user entity if found; otherwise, null.</returns>
-        //public async Task<User> GetUserByIdAsync(int userId)
-        //{
-        //    return await _context.Users
-        //        .Include(u => u.Role)       // Include Role entity
-        //        .Include(u => u.Student)    // Include Student entity (if applicable)
-        //        .Include(u => u.Lecturer)   // Include Lecturer entity (if applicable)
-        //        .FirstOrDefaultAsync(u => u.UserId == userId); // Fetch user by ID
-        //}
         public async Task<User> GetUserByEmailAsync(string email)
         {
             // Validate the email

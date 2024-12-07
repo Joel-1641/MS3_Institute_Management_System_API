@@ -16,6 +16,7 @@ namespace MSS1.Controllers
             _service = service;
         }
 
+
         //[HttpGet("profile")]
         //public async Task<IActionResult> GetProfile([FromQuery] int studentId)
         //{

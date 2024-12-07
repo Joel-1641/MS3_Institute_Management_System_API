@@ -164,6 +164,24 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred while retrieving the course." });
             }
         }
+
+        [HttpGet("courses/byname")]
+        public async Task<IActionResult> GetCourseByName([FromQuery] string courseName)
+        {
+            try
+            {
+                var response = await _courseService.GetCourseByNameAsync(courseName);
+                return Ok(response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving the course." });
+            }
+        }
         [HttpGet("lecturers")]
         public async Task<IActionResult> GetAllLecturers()
         {
@@ -232,7 +250,19 @@ namespace MSS1.Controllers
                 return NotFound(new { Message = ex.Message });
             }
         }
-
+        [HttpGet("by-nic/{nicNumber}")]
+        public async Task<IActionResult> GetStudentByNICNumber(string nicNumber)
+        {
+            try
+            {
+                var student = await _studentService.GetStudentByNICNumberAsync(nicNumber);
+                return Ok(student);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
         // Delete Student By Id
         [HttpDelete("students/{id}")]
         public async Task<IActionResult> DeleteStudentById(int id)

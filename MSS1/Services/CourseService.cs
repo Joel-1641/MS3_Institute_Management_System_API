@@ -86,7 +86,7 @@ namespace MSS1.Services
         {
             var course = new Course
             {
-                CourseId = request.CourseId,
+               // CourseId = request.CourseId,
                 CourseName = request.CourseName,
                 Level = request.Level,
                 CourseFee = request.CourseFee,
@@ -135,6 +135,28 @@ namespace MSS1.Services
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 CourseDuration = course.CourseDuration, 
+                CourseImg = course.CourseImg,
+                CourseEndDate = course.CourseEndDate,
+            };
+        }
+
+        public async Task<CourseResponseDTO> GetCourseByNameAsync(string courseName)
+        {
+            var course = await _courseRepository.GetCourseByNameAsync(courseName);
+
+            if (course == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+
+            return new CourseResponseDTO
+            {
+                CourseId = course.CourseId,
+                CourseName = course.CourseName,
+                Level = course.Level,
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                CourseDuration = course.CourseDuration,
                 CourseImg = course.CourseImg,
                 CourseEndDate = course.CourseEndDate,
             };

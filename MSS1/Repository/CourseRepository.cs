@@ -90,6 +90,11 @@ namespace MSS1.Repository
             return await _context.Courses
                                  .FirstOrDefaultAsync(c => c.CourseName.ToLower() == courseName.ToLower() && c.Level.ToLower() == level.ToLower());
         }
+        public async Task<Course> GetCourseByNameAsync(string courseName)
+        {
+            return await _context.Courses
+                                 .FirstOrDefaultAsync(c => c.CourseName.ToLower() == courseName.ToLower());
+        }
 
 
 

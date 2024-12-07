@@ -9,6 +9,7 @@ namespace MSS1.Interfaces
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student> UpdateStudentAsync(Student student);
         Task DeleteStudentAsync(int studentId);
+        Task<Student> GetStudentByNICNumberAsync(string nicNumber);
         //Task<Student> GetStudentProfile(int studentId);
         //Task UpdateStudentProfile(int studentId, Student student);
         //Task<List<Course>> GetStudentCourses(int studentId);

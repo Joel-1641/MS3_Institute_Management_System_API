@@ -69,7 +69,7 @@ namespace MSS1.Services
             if (request is AddStudentRequestDTO studentRequest) // If it's a Student
             {
                 if (!studentRequest.IsRegistrationFeePaid)
-                    throw new ArgumentException("Registration fee must be paid for students.");
+                    throw new ArgumentException("Registration fee must be paid by students.");
 
                 var student = new Student
                 {
@@ -129,6 +129,23 @@ namespace MSS1.Services
                 return Convert.ToBase64String(sha256.ComputeHash(saltedPassword));
             }
         }
+        //public async Task<StudentResponseDTO> GetStudentByNICAsync(string nicNumber)
+        //{
+        //    var student = await _studentRepository.GetStudentByNICAsync(nicNumber);
+        //    if (student == null)
+        //        throw new ArgumentException("Student not found with the given NIC.");
+
+        //    return new StudentResponseDTO
+        //    {
+        //        FullName = student.User.FullName,
+        //        Email = student.User.Email,
+        //        Address = student.User.Address,
+        //        MobileNumber = student.User.MobileNumber,
+        //        Gender = student.User.Gender,
+        //        NICNumber = student.User.NICNumber,
+        //        DateOfBirth = student.User.DateOfBirth
+        //    };
+        //}
 
         public async Task<List<LecturerResponseDTO>> GetAllLecturersAsync()
         {

@@ -27,8 +27,8 @@ namespace MSS1.Services
                 Address = s.User.Address,
                 MobileNumber = s.User.MobileNumber,
                 Gender = s.User.Gender,
-                RegistrationFee = s.RegistrationFee,
-                IsRegistrationFeePaid = s.IsRegistrationFeePaid,
+                //RegistrationFee = s.RegistrationFee,
+               // IsRegistrationFeePaid = s.IsRegistrationFeePaid,
                 NICNumber = s.User.NICNumber,
                 DateOfBirth = s.User.DateOfBirth,
 
@@ -52,13 +52,31 @@ namespace MSS1.Services
                 Address = student.User.Address,
                 MobileNumber = student.User.MobileNumber,
                 Gender = student.User.Gender,
-                RegistrationFee = student.RegistrationFee,
-                IsRegistrationFeePaid = student.IsRegistrationFeePaid,
+               // RegistrationFee = student.RegistrationFee,
+                //IsRegistrationFeePaid = student.IsRegistrationFeePaid,
                 NICNumber = student.User.NICNumber,
                 DateOfBirth= student.User.DateOfBirth,
             };
         }
 
+        //Get Student By NIC
+        public async Task<StudentResponseDTO> GetStudentByNICNumberAsync(string nicNumber)
+        {
+            var student = await _repository.GetStudentByNICNumberAsync(nicNumber);
+            if (student == null)
+                throw new ArgumentException("Student not found.");
+
+            return new StudentResponseDTO
+            {
+                FullName = student.User.FullName,
+                Email = student.User.Email,
+                Address = student.User.Address,
+                MobileNumber = student.User.MobileNumber,
+                Gender = student.User.Gender,
+                NICNumber = student.User.NICNumber,
+                DateOfBirth = student.User.DateOfBirth
+            };
+        }
         // Delete Student By Id
         public async Task DeleteStudentAsync(int studentId)
         {
@@ -93,8 +111,8 @@ namespace MSS1.Services
                 Address = updatedStudent.User.Address,
                 MobileNumber = updatedStudent.User.MobileNumber,
                 Gender = updatedStudent.User.Gender,
-                RegistrationFee = updatedStudent.RegistrationFee,
-                IsRegistrationFeePaid = updatedStudent.IsRegistrationFeePaid,
+               // RegistrationFee = updatedStudent.RegistrationFee,
+               // IsRegistrationFeePaid = updatedStudent.IsRegistrationFeePaid,
                 //DateOfBirth = updatedStudent.DateOfBirth
 
             };

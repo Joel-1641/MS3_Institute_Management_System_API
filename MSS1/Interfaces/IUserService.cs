@@ -12,5 +12,6 @@ namespace MSS1.Interfaces
         Task<AddUserResponseDTO> AddUserAsync(AddUserRequestDTO request);
         Task<LoginResponseDTO> LoginAsync(LoginRequestDTO request);
         Task LogoutAsync() => Task.CompletedTask;
+        //Task<StudentResponseDTO> GetStudentByNICAsync(string nicNumber);
     }
 }
