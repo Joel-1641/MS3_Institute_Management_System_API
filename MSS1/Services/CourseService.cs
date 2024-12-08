@@ -53,6 +53,13 @@ namespace MSS1.Services
 
         public async Task<CourseResponseDTO> AddCourseAsync(AddCourseRequestDTO request)
         {
+            // Validate the Level field
+            var validLevels = new List<string> { "Beginner", "Intermediate" };
+            if (!validLevels.Contains(request.Level, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Invalid level provided. Please enter 'Beginner' or 'Intermediate'.");
+            }
+
             var course = new Course
             {
                 CourseName = request.CourseName,
@@ -80,6 +87,7 @@ namespace MSS1.Services
                 CourseEndDate = addedCourse.CourseEndDate
             };
         }
+
 
 
         public async Task<CourseResponseDTO> UpdateCourseAsync(int courseId, UpdateCourseRequestDTO request)
