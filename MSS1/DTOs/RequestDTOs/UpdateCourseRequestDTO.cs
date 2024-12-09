@@ -18,7 +18,8 @@
         public string Description { get; set; }
         public string CourseDuration { get; set; }
         public string CourseImg {  get; set; }
-        public DateTime CourseEndDate { get; set; }
-        public DateTime CourseStartDate { get; set; } = DateTime.Now;
+        public string CourseType { get; set; }
+        //public DateTime CourseEndDate { get; set; }
+        //public DateTime CourseStartDate { get; set; } = DateTime.Now;
     }
 }

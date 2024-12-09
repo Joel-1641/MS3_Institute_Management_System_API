@@ -18,7 +18,7 @@ namespace MSS1.Database
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Payment> Payments { get; set; }
+       // public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
@@ -41,9 +41,9 @@ namespace MSS1.Database
                 .Property(c => c.CourseFee)
                 .HasPrecision(18, 2); // Precision 18, scale 2 (example)
 
-            modelBuilder.Entity<Payment>()
-                .Property(p => p.AmountPaid)
-                .HasPrecision(18, 2); // Precision 18, scale 2 (example)
+            //modelBuilder.Entity<Payment>()
+            //    .Property(p => p.AmountPaid)
+            //    .HasPrecision(18, 2); // Precision 18, scale 2 (example)
 
             modelBuilder.Entity<Student>()
                 .Property(s => s.RegistrationFee)

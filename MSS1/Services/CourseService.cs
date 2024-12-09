@@ -26,8 +26,9 @@ namespace MSS1.Services
                 CourseFee = c.CourseFee,
                 Description = c.Description,
                 CourseImg = c.CourseImg,
-                CourseStartDate = c.CourseStartDate,
-                CourseEndDate = c.CourseEndDate,
+                CourseType = c.CourseType,
+               // CourseStartDate = c.CourseStartDate,
+                //CourseEndDate = c.CourseEndDate,
                 CourseDuration = c.CourseDuration
             });
         }
@@ -46,8 +47,9 @@ namespace MSS1.Services
                 Description = course.Description,
                 CourseImg = course.CourseImg,
                 CourseDuration = course.CourseDuration,
-                CourseStartDate = course.CourseStartDate,
-                CourseEndDate = course.CourseEndDate
+                CourseType = course.CourseType,
+                //CourseStartDate = course.CourseStartDate,
+                //CourseEndDate = course.CourseEndDate
             };
         }
 
@@ -68,8 +70,9 @@ namespace MSS1.Services
                 Description = request.Description,
                 CourseImg = request.CourseImg,
                 CourseDuration = request.CourseDuration,
-                CourseStartDate = request.CourseStartDate,
-                CourseEndDate = request.CourseEndDate
+                CourseType = request.CourseType,
+               // CourseStartDate = request.CourseStartDate,
+                //CourseEndDate = request.CourseEndDate
             };
 
             var addedCourse = await _courseRepository.AddCourseAsync(course);
@@ -83,8 +86,9 @@ namespace MSS1.Services
                 Description = addedCourse.Description,
                 CourseImg = addedCourse.CourseImg,
                 CourseDuration = addedCourse.CourseDuration,
-                CourseStartDate = addedCourse.CourseStartDate,
-                CourseEndDate = addedCourse.CourseEndDate
+                CourseType = addedCourse.CourseType,
+               // CourseStartDate = addedCourse.CourseStartDate,
+                //CourseEndDate = addedCourse.CourseEndDate
             };
         }
 
@@ -92,6 +96,12 @@ namespace MSS1.Services
 
         public async Task<CourseResponseDTO> UpdateCourseAsync(int courseId, UpdateCourseRequestDTO request)
         {
+            var validLevels = new List<string> { "Beginner", "Intermediate" };
+            if (!validLevels.Contains(request.Level, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Invalid level provided. Please enter 'Beginner' or 'Intermediate'.");
+            }
+
             var course = new Course
             {
                 CourseId = courseId, // Use the CourseId from the URL
@@ -101,8 +111,9 @@ namespace MSS1.Services
                 Description = request.Description,
                 CourseDuration = request.CourseDuration,
                 CourseImg = request.CourseImg,
-                CourseStartDate = request.CourseStartDate,
-                CourseEndDate = request.CourseEndDate
+                CourseType = request.CourseType,
+               // CourseStartDate = request.CourseStartDate,
+                //CourseEndDate = request.CourseEndDate
             };
 
             var updatedCourse = await _courseRepository.UpdateCourseAsync(course);
@@ -116,8 +127,9 @@ namespace MSS1.Services
                 Description = updatedCourse.Description,
                 CourseDuration = updatedCourse.CourseDuration,
                 CourseImg = updatedCourse.CourseImg,
-                CourseStartDate = updatedCourse.CourseStartDate,
-                CourseEndDate = updatedCourse.CourseEndDate
+                CourseType = updatedCourse.CourseType,
+               // CourseStartDate = updatedCourse.CourseStartDate,
+                //CourseEndDate = updatedCourse.CourseEndDate
             };
         }
 
@@ -146,7 +158,8 @@ namespace MSS1.Services
                 Description = course.Description,
                 CourseDuration = course.CourseDuration, 
                 CourseImg = course.CourseImg,
-                CourseEndDate = course.CourseEndDate,
+                CourseType= course.CourseType,
+                //CourseEndDate = course.CourseEndDate,
             };
         }
 
@@ -168,7 +181,8 @@ namespace MSS1.Services
                 Description = course.Description,
                 CourseDuration = course.CourseDuration,
                 CourseImg = course.CourseImg,
-                CourseEndDate = course.CourseEndDate,
+                CourseType= course.CourseType,
+               // CourseEndDate = course.CourseEndDate,
             };
         }
         public async Task<IEnumerable<CourseNameDTO>> GetAllCourseNamesAsync()

@@ -57,7 +57,7 @@ namespace MSS1.Repository
                 .Select(sc => sc.Course)
                 .ToListAsync();
         }
-
+      
         public async Task<IEnumerable<(Student Student, IEnumerable<Course> Courses)>> GetAllStudentCoursesAsync()
         {
             var studentCourses = await _context.StudentCourses

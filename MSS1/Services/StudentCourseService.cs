@@ -51,7 +51,8 @@ namespace MSS1.Services
                 studentCourses.Add(new StudentCourse
                 {
                     StudentId = student.StudentId,
-                    CourseId = courseId.Value
+                    CourseId = courseId.Value,
+                    EnrollDate = DateOnly.FromDateTime(DateTime.Now)
                 });
             }
 
@@ -79,8 +80,10 @@ namespace MSS1.Services
                 CourseFee = c.CourseFee,
                 Description = c.Description,
                 CourseDuration =c.CourseDuration,
-                CourseStartDate =c.CourseStartDate,
-                CourseEndDate =c.CourseEndDate
+                CourseType = c.CourseType,
+               // EnrollDate = c.EnrollDate,
+               // CourseStartDate =c.CourseStartDate,
+                //CourseEndDate =c.CourseEndDate
             });
         }
 
@@ -99,8 +102,12 @@ namespace MSS1.Services
                     CourseFee = c.CourseFee,
                     Description = c.Description,
                     CourseDuration = c.CourseDuration,
-                    CourseStartDate =c.CourseStartDate,
-                    CourseEndDate = c.CourseEndDate,
+                    CourseType = c.CourseType,
+                    
+                    
+                    
+                   // CourseStartDate =c.CourseStartDate,
+                    //CourseEndDate = c.CourseEndDate,
                 }).ToList()
             });
         }
@@ -131,8 +138,10 @@ namespace MSS1.Services
                     CourseFee = sc.Course.CourseFee,
                     Description = sc.Course.Description,
                     CourseDuration = sc.Course.CourseDuration,
-                    CourseStartDate =sc.Course.CourseStartDate,
-                    CourseEndDate =sc.Course.CourseEndDate
+                    CourseType = sc.Course.CourseType,
+                    EnrollDate = sc.EnrollDate,
+                  //  CourseStartDate =sc.Course.CourseStartDate,
+                    //CourseEndDate =sc.Course.CourseEndDate
                 }).ToList()
             };
         }
@@ -154,8 +163,9 @@ namespace MSS1.Services
                 Level = c.Level,
                 CourseFee = c.CourseFee,
                 CourseDuration = c.CourseDuration,
-                CourseStartDate =c.CourseStartDate,
-                CourseEndDate =c.CourseEndDate
+                CourseType = c.CourseType,
+              //  CourseStartDate =c.CourseStartDate,
+                //CourseEndDate =c.CourseEndDate
             });
         }
 
@@ -195,8 +205,9 @@ namespace MSS1.Services
                 CourseFee = c.CourseFee,
                 Description = c.Description,
                 CourseDuration = c.CourseDuration,
-                CourseStartDate =c.CourseStartDate,
-                CourseEndDate = c.CourseEndDate
+                CourseType = c.CourseType,
+                //CourseStartDate =c.CourseStartDate,
+                //CourseEndDate = c.CourseEndDate
             });
         }
 

@@ -4,6 +4,8 @@
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }
+        public DateOnly EnrollDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
 
         // Navigation properties
         public Student Student { get; set; }

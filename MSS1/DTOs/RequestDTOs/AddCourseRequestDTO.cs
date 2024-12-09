@@ -18,7 +18,8 @@ namespace MSS1.DTOs.RequestDTOs
         public string Description { get; set; }
         public string CourseImg {  get; set; }
         public string CourseDuration { get; set; }
-        public DateTime CourseStartDate { get; set; } = DateTime.Now;
-        public DateTime CourseEndDate { get; set; }
+        public string CourseType { get; set; }
+       // public DateTime CourseStartDate { get; set; } = DateTime.Now;
+        //public DateTime CourseEndDate { get; set; }
     }
 }

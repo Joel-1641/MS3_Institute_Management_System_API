@@ -11,6 +11,17 @@ namespace MSS1.Repository
     {
         private readonly ITDbContext _context;
 
+        public async Task<Course> AddCourseAsync(Course course)
+        {
+            if (await IsDuplicateCourseAsync(course.CourseName, course.Level))
+            {
+                throw new ArgumentException($"A course with the name '{course.CourseName}' and level '{course.Level}' already exists.");
+            }
+
+            _context.Courses.Add(course);
+            await _context.SaveChangesAsync();
+            return course;
+        }
         public CourseRepository(ITDbContext context)
         {
             _context = context;
@@ -25,17 +36,7 @@ namespace MSS1.Repository
             return await _context.Courses.FindAsync(courseId);
         }
 
-        public async Task<Course> AddCourseAsync(Course course)
-        {
-            if (await IsDuplicateCourseAsync(course.CourseName, course.Level))
-            {
-                throw new ArgumentException($"A course with the name '{course.CourseName}' and level '{course.Level}' already exists.");
-            }
-
-            _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
-            return course;
-        }
+       
 
 
         public async Task<Course> UpdateCourseAsync(Course course)
@@ -60,8 +61,9 @@ namespace MSS1.Repository
             existingCourse.Description = course.Description;
             existingCourse.CourseDuration = course.CourseDuration;
             existingCourse.CourseImg = course.CourseImg;
-            existingCourse.CourseStartDate = course.CourseStartDate;
-            existingCourse.CourseEndDate = course.CourseEndDate;
+            existingCourse.CourseType = course.CourseType;
+           // existingCourse.CourseStartDate = course.CourseStartDate;
+            //existingCourse.CourseEndDate = course.CourseEndDate;
 
             await _context.SaveChangesAsync();
             return existingCourse;
