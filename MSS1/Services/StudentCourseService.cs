@@ -52,7 +52,7 @@ namespace MSS1.Services
                 {
                     StudentId = student.StudentId,
                     CourseId = courseId.Value,
-                    EnrollDate = DateOnly.FromDateTime(DateTime.Now)
+                   // EnrollDate = DateOnly.FromDateTime(DateTime.Now)
                 });
             }
 
