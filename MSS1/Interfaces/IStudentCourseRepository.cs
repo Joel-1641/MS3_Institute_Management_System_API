@@ -17,5 +17,6 @@ namespace MSS1.Interfaces
         Task<int?> GetCourseIdByNameAndLevelAsync(string courseName, string level);
         Task<bool> IsStudentEnrolledInCourseAsync(int studentId, int courseId);
         //Task<string> GetStudentNICByIdAsync(int studentId);
+        Task<decimal> GetTotalFeeForStudentAsync(int studentId);
     }
 }

@@ -13,6 +13,7 @@ namespace MSS1.Interfaces
         Task<string> GetStudentNICByIdAsync(int studentId);
         Task<IEnumerable<CourseResponseDTO>> GetAllCoursesAsync();
         Task<IEnumerable<CourseResponseDTO>> GetCoursesByNICAsync(string nic);
+        Task<StudentTotalFeeResponseDTO> GetTotalFeeByNICAsync(string nic);
         //Task<StudentWithCourseResponseDTO> GetStudentWithCoursesByIdAsync(int studentId);
     }
 }

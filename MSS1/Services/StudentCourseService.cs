@@ -210,7 +210,24 @@ namespace MSS1.Services
                 //CourseEndDate = c.CourseEndDate
             });
         }
+        public async Task<StudentTotalFeeResponseDTO> GetTotalFeeByNICAsync(string nic)
+        {
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
 
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+
+            return new StudentTotalFeeResponseDTO
+            {
+                StudentId = student.StudentId,
+                StudentName = student.User.FullName,
+                TotalFee = totalFee
+            };
+        }
 
     }
 }

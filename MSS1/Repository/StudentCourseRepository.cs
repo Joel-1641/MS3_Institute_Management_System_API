@@ -106,7 +106,13 @@ namespace MSS1.Repository
             return await _context.StudentCourses
                 .AnyAsync(sc => sc.StudentId == studentId && sc.CourseId == courseId);
         }
-
+        public async Task<decimal> GetTotalFeeForStudentAsync(int studentId)
+        {
+            // Calculate the total fee by summing the CourseFee of the student's enrolled courses
+            return await _context.StudentCourses
+                .Where(sc => sc.StudentId == studentId)
+                .SumAsync(sc => sc.Course.CourseFee);
+        }
 
     }
 }

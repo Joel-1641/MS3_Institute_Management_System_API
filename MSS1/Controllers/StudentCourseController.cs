@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSS1.DTOs.RequestDTOs;
+using MSS1.DTOs.ResponseDTOs;
 using MSS1.Interfaces;
 
 namespace MSS1.Controllers
@@ -96,7 +97,23 @@ namespace MSS1.Controllers
                 return NotFound(ex.Message);
             }
         }
-
+        [HttpGet("total-fee/{nic}")]
+        public async Task<ActionResult<StudentTotalFeeResponseDTO>> GetTotalFeeByNICAsync(string nic)
+        {
+            try
+            {
+                var result = await _studentCourseService.GetTotalFeeByNICAsync(nic);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
     }
 }
