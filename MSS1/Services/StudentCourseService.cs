@@ -277,6 +277,41 @@ namespace MSS1.Services
         PaymentStatus = paymentStatus
     };
 }
+        public async Task<IEnumerable<StudentPaymentStatusResponseDTO>> GetAllStudentsPaymentStatusAsync()
+        {
+            var students = await _studentCourseRepository.GetAllStudentsAsync(); // Call the method from repo
+
+            var studentPaymentStatuses = new List<StudentPaymentStatusResponseDTO>();
+
+            foreach (var student in students)
+            {
+                // Calculate total fee
+                var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+
+                // Calculate total amount paid
+                var totalPaid = await _studentCourseRepository.GetTotalAmountPaidByStudentAsync(student.StudentId);
+
+                // Calculate payment due
+                var paymentDue = totalFee - totalPaid;
+
+                // Determine payment status
+                var paymentStatus = paymentDue > 0 ? "Pending" : "Success";
+
+                studentPaymentStatuses.Add(new StudentPaymentStatusResponseDTO
+                {
+                    StudentId = student.StudentId,
+                    StudentName = student.User.FullName,
+                    TotalFee = totalFee,
+                    TotalPaid = totalPaid,
+                    PaymentDue = paymentDue,
+                    PaymentStatus = paymentStatus,
+                    NIC = student.User.NICNumber // Include NIC here
+                });
+            }
+
+            return studentPaymentStatuses;
+        }
+
 
 
 

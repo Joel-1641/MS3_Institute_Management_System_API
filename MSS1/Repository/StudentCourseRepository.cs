@@ -125,6 +125,16 @@ namespace MSS1.Repository
                 .Where(p => p.StudentId == studentId)
                 .SumAsync(p => p.AmountPaid);
         }
+        // Repository Method
+        public async Task<IEnumerable<Student>> GetAllStudentsAsync()
+        {
+            return await _context.Students
+                .Include(s => s.User) // Include User to access student details like name, NIC, etc.
+                .ToListAsync();
+        }
+
+
+
 
 
 

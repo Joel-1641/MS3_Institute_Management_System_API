@@ -9,7 +9,7 @@ namespace MSS1.Entities
         public int StudentId { get; set; }
         public decimal AmountPaid { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.Now;
-
+        //public decimal TotalFee { get; set; }
         // Navigation property
         public Student Student { get; set; }
     }

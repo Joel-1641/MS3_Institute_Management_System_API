@@ -20,7 +20,7 @@ namespace MSS1.Interfaces
         Task<decimal> GetTotalFeeForStudentAsync(int studentId);
         Task AddPaymentAsync(Payment payment);
         Task<decimal> GetTotalAmountPaidByStudentAsync(int studentId);
-
-
+        //Task<List<StudentPaymentSummaryDTO>> GetAllStudentsPaymentStatusAsync();
+        Task<IEnumerable<Student>> GetAllStudentsAsync();
     }
 }
