@@ -114,6 +114,41 @@ namespace MSS1.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("record-payment")]
+        public async Task<IActionResult> RecordPayment([FromBody] RecordPaymentRequestDTO request)
+        {
+            try
+            {
+                await _studentCourseService.RecordPaymentAsync(request.NIC, request.Amount);
+                return Ok("Payment recorded successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("payment-status/{nic}")]
+        public async Task<IActionResult> GetPaymentStatus(string nic)
+        {
+            try
+            {
+                var result = await _studentCourseService.GetPaymentStatusByNICAsync(nic);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
+            }
+        }
+
 
     }
 }

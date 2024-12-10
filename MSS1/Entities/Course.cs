@@ -20,6 +20,8 @@ namespace MSS1.Entities
         public string Description { get; set; }
         public string CourseImg {  get; set; }
         public string CourseType { get; set; }
+
+       // public Payment Payment { get; set; }
         
         //public DateTime CourseStartDate { get; set; }= DateTime.Now;
         //public DateTime CourseEndDate { get; set; }

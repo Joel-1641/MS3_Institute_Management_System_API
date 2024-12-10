@@ -18,7 +18,7 @@ namespace MSS1.Database
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
-       // public DbSet<Payment> Payments { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
@@ -92,10 +92,17 @@ namespace MSS1.Database
                 .HasOne(sc => sc.Course)
                 .WithMany(c => c.StudentCourses)
                 .HasForeignKey(sc => sc.CourseId);
+
+            modelBuilder.Entity<Payment>().HasKey(p => p.PaymentId);
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Student)
+                .WithMany(s => s.Payments) // Add this navigation property to `Student`
+                .HasForeignKey(p => p.StudentId);
+
         }
-       
-          
-        
+
+
+
 
 
 

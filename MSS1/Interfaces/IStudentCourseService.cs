@@ -14,6 +14,8 @@ namespace MSS1.Interfaces
         Task<IEnumerable<CourseResponseDTO>> GetAllCoursesAsync();
         Task<IEnumerable<CourseResponseDTO>> GetCoursesByNICAsync(string nic);
         Task<StudentTotalFeeResponseDTO> GetTotalFeeByNICAsync(string nic);
-        //Task<StudentWithCourseResponseDTO> GetStudentWithCoursesByIdAsync(int studentId);
+        Task RecordPaymentAsync(string nic, decimal amount);
+        Task<StudentPaymentStatusResponseDTO> GetPaymentStatusByNICAsync(string nic);
     }
 }
+

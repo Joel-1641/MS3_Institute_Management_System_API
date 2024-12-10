@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSS1.Database;
+using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
 
@@ -113,6 +114,23 @@ namespace MSS1.Repository
                 .Where(sc => sc.StudentId == studentId)
                 .SumAsync(sc => sc.Course.CourseFee);
         }
+        public async Task AddPaymentAsync(Payment payment)
+        {
+            await _context.Payments.AddAsync(payment);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<decimal> GetTotalAmountPaidByStudentAsync(int studentId)
+        {
+            return await _context.Payments
+                .Where(p => p.StudentId == studentId)
+                .SumAsync(p => p.AmountPaid);
+        }
+
+
+
+
+
+
 
     }
 }

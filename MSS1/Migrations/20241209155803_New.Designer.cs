@@ -4,6 +4,7 @@ using MSS1.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MSS1.Migrations
 {
     [DbContext(typeof(ITDbContext))]
-    partial class ITDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241209155803_New")]
+    partial class New
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,30 +221,6 @@ namespace MSS1.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("MSS1.Entities.Payment", b =>
-                {
-                    b.Property<int>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
-
-                    b.Property<decimal>("AmountPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PaymentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("MSS1.Entities.Role", b =>
                 {
                     b.Property<int>("RoleId")
@@ -435,17 +414,6 @@ namespace MSS1.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MSS1.Entities.Payment", b =>
-                {
-                    b.HasOne("MSS1.Entities.Student", "Student")
-                        .WithMany("Payments")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("MSS1.Entities.Student", b =>
                 {
                     b.HasOne("MSS1.Entities.Course", null)
@@ -510,8 +478,6 @@ namespace MSS1.Migrations
 
             modelBuilder.Entity("MSS1.Entities.Student", b =>
                 {
-                    b.Navigation("Payments");
-
                     b.Navigation("StudentCourses");
                 });
 

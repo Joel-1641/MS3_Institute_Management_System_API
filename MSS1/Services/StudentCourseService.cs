@@ -228,6 +228,59 @@ namespace MSS1.Services
                 TotalFee = totalFee
             };
         }
+        public async Task RecordPaymentAsync(string nic, decimal amount)
+        {
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            // Add the payment
+            await _studentCourseRepository.AddPaymentAsync(new Payment
+            {
+                StudentId = student.StudentId,
+                AmountPaid = amount
+            });
+        }
+        public async Task<StudentPaymentStatusResponseDTO> GetPaymentStatusByNICAsync(string nic)
+{
+    // Retrieve the student by NIC
+    var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+    if (student == null)
+    {
+        throw new KeyNotFoundException($"No student found with NIC {nic}.");
+    }
+
+    // Calculate total fee
+    var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+
+    // Calculate total amount paid
+    var totalPaid = await _studentCourseRepository.GetTotalAmountPaidByStudentAsync(student.StudentId);
+
+    // Calculate payment due
+    var paymentDue = totalFee - totalPaid;
+
+    // Determine payment status
+    var paymentStatus = paymentDue > 0 ? "Pending" : "Success";
+
+    // Return the response DTO
+    return new StudentPaymentStatusResponseDTO
+    {
+        StudentId = student.StudentId,
+        StudentName = student.User.FullName,
+        TotalFee = totalFee,
+        TotalPaid = totalPaid,
+        PaymentDue = paymentDue,
+        PaymentStatus = paymentStatus
+    };
+}
+
+
+
+
 
     }
 }
