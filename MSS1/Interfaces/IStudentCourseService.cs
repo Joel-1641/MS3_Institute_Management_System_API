@@ -17,6 +17,7 @@ namespace MSS1.Interfaces
         Task RecordPaymentAsync(string nic, decimal amount);
         Task<StudentPaymentStatusResponseDTO> GetPaymentStatusByNICAsync(string nic);
         Task<IEnumerable<StudentPaymentStatusResponseDTO>> GetAllStudentsPaymentStatusAsync();
+        Task<CumulativePaymentStatusDTO> GetCumulativePaymentStatusAsync();
     }
 }
 

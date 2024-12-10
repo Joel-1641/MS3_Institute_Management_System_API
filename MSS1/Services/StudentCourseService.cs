@@ -313,6 +313,39 @@ namespace MSS1.Services
         }
 
 
+        public async Task<CumulativePaymentStatusDTO> GetCumulativePaymentStatusAsync()
+        {
+            var students = await _studentCourseRepository.GetAllStudentsAsync(); // Get all students
+
+            decimal cumulativeTotalFee = 0;
+            decimal cumulativeTotalPaid = 0;
+            decimal cumulativePaymentDue = 0;
+
+            foreach (var student in students)
+            {
+                // Calculate total fee for each student
+                var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+
+                // Calculate total paid for each student
+                var totalPaid = await _studentCourseRepository.GetTotalAmountPaidByStudentAsync(student.StudentId);
+
+                // Calculate payment due for each student
+                var paymentDue = totalFee - totalPaid;
+
+                // Add to cumulative totals
+                cumulativeTotalFee += totalFee;
+                cumulativeTotalPaid += totalPaid;
+                cumulativePaymentDue += paymentDue;
+            }
+
+            // Return cumulative totals as a DTO
+            return new CumulativePaymentStatusDTO
+            {
+                CumulativeTotalFee = cumulativeTotalFee,
+                CumulativeTotalPaid = cumulativeTotalPaid,
+                CumulativePaymentDue = cumulativePaymentDue
+            };
+        }
 
 
 

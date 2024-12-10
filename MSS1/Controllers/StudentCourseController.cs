@@ -161,6 +161,19 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
             }
         }
+        [HttpGet("cumulative-payment-status")]
+        public async Task<IActionResult> GetCumulativePaymentStatus()
+        {
+            try
+            {
+                var result = await _studentCourseService.GetCumulativePaymentStatusAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
+            }
+        }
 
 
 
