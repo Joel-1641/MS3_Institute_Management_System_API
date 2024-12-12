@@ -1,14 +1,17 @@
-﻿using MSS1.DTOs.ResponseDTOs;
+﻿using MSS1.DTOs.RequestDTOs;
+using MSS1.DTOs.ResponseDTOs;
 
 namespace MSS1.Interfaces
 {
     public interface ILecturerService
     {
-        Task<IEnumerable<LecturerResponseDTO>> GetAllLecturersAsync();
-       // Task<LecturerResponseDTO> GetLecturerByIdAsync(int lecturerId);
-       // Task<List<string>> GetCoursesByLecturerAsync(int lecturerId);
-      //  Task AssignCoursesToLecturerAsync(int lecturerId, List<string> courses);
-      //  Task DeleteLecturerAsync(int lecturerId);
+        Task<List<LecturerResponseDTO>> GetAllLecturersAsync();
+        Task<LecturerResponseDTO> GetLecturerByIdAsync(int lecturerId);
+        Task DeleteLecturerAsync(int lecturerId);
+        Task UpdateLecturerAsync(int lecturerId, UpdateLecturerRequestDTO request);
+        Task<int> GetTotalLecturerCountAsync();
+
+
     }
 
 

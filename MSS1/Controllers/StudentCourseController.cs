@@ -174,6 +174,28 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
             }
         }
+        [HttpGet("totalcoursesbynic/{nic}")]
+        public async Task<IActionResult> GetTotalCoursesByNIC(string nic)
+        {
+            try
+            {
+                // Get the total number of courses by NIC
+                var totalCourses = await _studentCourseService.GetTotalCoursesByNICAsync(nic);
+
+                // Return the result as JSON
+                return Ok(new { TotalCourses = totalCourses });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // If student is not found
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Details = ex.Message });
+            }
+        }
 
 
 

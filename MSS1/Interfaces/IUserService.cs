@@ -5,10 +5,10 @@ namespace MSS1.Interfaces
 {
     public interface IUserService
     {
-        Task<List<LecturerResponseDTO>> GetAllLecturersAsync();
-        Task<LecturerResponseDTO> GetLecturerByIdAsync(int lecturerId);
-        Task DeleteLecturerAsync(int lecturerId);
-        Task UpdateLecturerAsync(int lecturerId, UpdateLecturerRequestDTO request);
+       // Task<List<LecturerResponseDTO>> GetAllLecturersAsync();
+        //Task<LecturerResponseDTO> GetLecturerByIdAsync(int lecturerId);
+      //  Task DeleteLecturerAsync(int lecturerId);
+      //  Task UpdateLecturerAsync(int lecturerId, UpdateLecturerRequestDTO request);
         Task<AddUserResponseDTO> AddUserAsync(AddUserRequestDTO request);
         Task<LoginResponseDTO> LoginAsync(LoginRequestDTO request);
         Task LogoutAsync() => Task.CompletedTask;

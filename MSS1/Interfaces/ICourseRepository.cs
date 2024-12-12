@@ -13,5 +13,6 @@ namespace MSS1.Interfaces
         Task<bool> IsDuplicateCourseAsync(string courseName, string level, int? excludeCourseId = null);
         Task<Course> GetCourseByNameAndLevelAsync(string courseName, string level);
         Task<Course> GetCourseByNameAsync(string courseName);
+        Task<int> GetTotalCourseCountAsync();
     }
 }

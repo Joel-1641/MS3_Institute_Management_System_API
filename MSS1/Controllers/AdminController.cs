@@ -185,14 +185,14 @@ namespace MSS1.Controllers
         [HttpGet("lecturers")]
         public async Task<IActionResult> GetAllLecturers()
         {
-            var lecturers = await _userService.GetAllLecturersAsync();
+            var lecturers = await _lecturerService.GetAllLecturersAsync();
             return Ok(lecturers);
         }
 
         [HttpGet("lecturers/{id}")]
         public async Task<IActionResult> GetLecturerById(int id)
         {
-            var lecturer = await _userService.GetLecturerByIdAsync(id);
+            var lecturer = await _lecturerService.GetLecturerByIdAsync(id);
             if (lecturer == null)
                 return NotFound(new { Message = "Lecturer not found." });
 
@@ -203,7 +203,7 @@ namespace MSS1.Controllers
         {
             try
             {
-                await _userService.DeleteLecturerAsync(id);
+                await _lecturerService.DeleteLecturerAsync(id);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -218,7 +218,7 @@ namespace MSS1.Controllers
         {
             try
             {
-                await _userService.UpdateLecturerAsync(id, request);
+                await _lecturerService.UpdateLecturerAsync(id, request);
                 return NoContent();
             }
             catch (ArgumentException ex)
@@ -322,5 +322,27 @@ namespace MSS1.Controllers
             _userService.LogoutAsync();
             return Ok(new { message = "Logged out successfully." });
         }
+        [HttpGet("total-students")]
+        public async Task<IActionResult> GetTotalStudents()
+        {
+            var studentCount = await _studentService.GetTotalStudentCountAsync();
+            return Ok(new { TotalStudents = studentCount });
+        }
+
+       
+        [HttpGet("total-lecturers")]
+        public async Task<IActionResult> GetTotalLecturers()
+        {
+            var lecturerCount = await _lecturerService.GetTotalLecturerCountAsync();
+            return Ok(new { TotalLecturers = lecturerCount });
+        }
+
+        [HttpGetAttribute("total-courses")]
+        public async Task<IActionResult> GetTotalCourses()
+        {
+            var courseCount = await _courseService.GetTotalCourseCountAsync();
+            return Ok(new { GetTotalCourses = courseCount });
+        }
+       
     }
 }

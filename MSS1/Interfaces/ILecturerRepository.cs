@@ -8,5 +8,6 @@ namespace MSS1.Interfaces
         Task<Lecturer> GetLecturerByIdAsync(int lecturerId);
         Task DeleteLecturerAsync(int lecturerId);
         Task UpdateLecturerAsync(Lecturer lecturer);
+        Task<int> GetTotalLecturerCountAsync();
     }
 }

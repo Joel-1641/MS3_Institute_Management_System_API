@@ -14,6 +14,7 @@ namespace MSS1.Interfaces
         Task<CourseResponseDTO> GetCourseByNameAndLevelAsync(string courseName, string level);
         Task<IEnumerable<CourseNameDTO>> GetAllCourseNamesAsync();
         Task<CourseResponseDTO> GetCourseByNameAsync(string courseName);
+        Task<int> GetTotalCourseCountAsync();
         //Task<IActionResult> GetCourseByNameAndLevel([FromQuery] string courseName, [FromQuery] string level);
     }
 }

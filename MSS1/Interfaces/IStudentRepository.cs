@@ -4,12 +4,13 @@ namespace MSS1.Interfaces
 {
     public interface IStudentRepository
     {
-        Task AddStudentAsync(Student student);
+     //   Task AddStudentAsync(Student student);
         Task<Student> GetStudentByIdAsync(int studentId);
         Task<List<Student>> GetAllStudentsAsync();
         Task<Student> UpdateStudentAsync(Student student);
         Task DeleteStudentAsync(int studentId);
         Task<Student> GetStudentByNICNumberAsync(string nicNumber);
+        Task<int> GetTotalStudentCountAsync();
         //Task<Student> GetStudentProfile(int studentId);
         //Task UpdateStudentProfile(int studentId, Student student);
         //Task<List<Course>> GetStudentCourses(int studentId);

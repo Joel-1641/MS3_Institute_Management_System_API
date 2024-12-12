@@ -117,6 +117,10 @@ namespace MSS1.Services
 
             };
         }
+        public async Task<int> GetTotalStudentCountAsync()
+        {
+            return await _repository.GetTotalStudentCountAsync();
+        }
 
 
 

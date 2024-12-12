@@ -347,6 +347,24 @@ namespace MSS1.Services
             };
         }
 
+        public async Task<int> GetTotalCoursesByNICAsync(string nic)
+        {
+            // Get the student by NIC
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            // Get the courses associated with the student
+            var courses = await _studentCourseRepository.GetCoursesByStudentIdAsync(student.StudentId);
+
+            // Return the count of courses
+            return courses.Count();
+        }
+
+
 
 
 

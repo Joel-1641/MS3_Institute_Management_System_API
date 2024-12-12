@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
@@ -195,7 +196,10 @@ namespace MSS1.Services
                 Level = c.Level
             }).ToList();
         }
-
+        public async Task<int> GetTotalCourseCountAsync()
+        {
+            return await _courseRepository.GetTotalCourseCountAsync();
+        }
 
     }
 }

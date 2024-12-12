@@ -58,6 +58,10 @@ namespace MSS1.Repository
             _context.Lecturers.Update(lecturer);
             await _context.SaveChangesAsync();
         }
+        public async Task<int> GetTotalLecturerCountAsync()
+        {
+            return await _context.Lecturers.CountAsync();
+        }
     }
 
 }

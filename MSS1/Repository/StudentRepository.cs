@@ -13,11 +13,11 @@ namespace MSS1.Repository
         {
             _context = context;
         }
-        public async Task AddStudentAsync(Student student)
-        {
-            await _context.Students.AddAsync(student);
-            await _context.SaveChangesAsync();
-        }
+        //public async Task AddStudentAsync(Student student)
+        //{
+        //    await _context.Students.AddAsync(student);
+        //    await _context.SaveChangesAsync();
+        //}
 
 
         // Get All Students
@@ -88,6 +88,10 @@ namespace MSS1.Repository
 
             await _context.SaveChangesAsync();
             return existingStudent;
+        }
+        public async Task<int> GetTotalStudentCountAsync()
+        {
+            return await _context.Students.CountAsync();
         }
     }
 }

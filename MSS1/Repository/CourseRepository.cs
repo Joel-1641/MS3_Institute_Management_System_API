@@ -99,7 +99,10 @@ namespace MSS1.Repository
                                  .FirstOrDefaultAsync(c => c.CourseName.ToLower() == courseName.ToLower());
         }
 
-
+        public async Task<int> GetTotalCourseCountAsync()
+        {
+            return await _context.Courses.CountAsync();
+        }
 
 
     }
