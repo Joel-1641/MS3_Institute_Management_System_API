@@ -18,7 +18,6 @@ namespace MSS1.Services
         {
             // Find the student by NIC
             var student = await _studentCourseRepository.GetStudentByNICAsync(request.NIC);
-
             if (student == null)
             {
                 throw new KeyNotFoundException($"No student found with NIC {request.NIC}.");
@@ -31,7 +30,6 @@ namespace MSS1.Services
             {
                 // Get the CourseId by CourseName and Level
                 var courseId = await _studentCourseRepository.GetCourseIdByNameAndLevelAsync(course.CourseName, course.Level);
-
                 if (courseId == null)
                 {
                     errorMessages.Add($"No course found with Name: {course.CourseName} and Level: {course.Level}.");
@@ -40,7 +38,6 @@ namespace MSS1.Services
 
                 // Check if the student is already enrolled in the course
                 var alreadyEnrolled = await _studentCourseRepository.IsStudentEnrolledInCourseAsync(student.StudentId, courseId.Value);
-
                 if (alreadyEnrolled)
                 {
                     errorMessages.Add($"Student is already enrolled in Course: {course.CourseName} with Level: {course.Level}.");
@@ -52,7 +49,7 @@ namespace MSS1.Services
                 {
                     StudentId = student.StudentId,
                     CourseId = courseId.Value,
-                   // EnrollDate = DateOnly.FromDateTime(DateTime.Now)
+                    // EnrollDate = DateOnly.FromDateTime(DateTime.Now)
                 });
             }
 
@@ -67,6 +64,20 @@ namespace MSS1.Services
             {
                 throw new InvalidOperationException(string.Join("; ", errorMessages));
             }
+
+            // Send notification to Admin
+            var notification = new Notification
+            {
+                StudentId = student.StudentId,
+                Message = $"Student {student.User.FullName} is (NIC: {student.User.NICNumber}) selected their courses and is now ready to pay.",
+                IsRead = false,  // Admin has not read the notification
+                CreatedAt = DateTime.Now,
+                NotificationType = "Enrollment",
+                Target = "Admin"
+            };
+
+            // Add the notification to the database
+            await _studentCourseRepository.AddNotificationAsync(notification);
         }
 
         public async Task<IEnumerable<CourseResponseDTO>> GetCoursesByStudentIdAsync(int studentId)
@@ -228,7 +239,7 @@ namespace MSS1.Services
                 TotalFee = totalFee
             };
         }
-        public async Task RecordPaymentAsync(string nic, decimal amount)
+        public async Task RecordPaymentAndNotifyStudentAsync(string nic, decimal amount)
         {
             var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
 
@@ -237,13 +248,31 @@ namespace MSS1.Services
                 throw new KeyNotFoundException($"No student found with NIC {nic}.");
             }
 
-            // Add the payment
+            // Record the payment
             await _studentCourseRepository.AddPaymentAsync(new Payment
             {
                 StudentId = student.StudentId,
-                AmountPaid = amount
+                AmountPaid = amount,
+                PaymentDate = DateTime.Now  // Ensure you save the payment date
             });
+
+            // Create a notification for the student
+            var notificationMessage = $"Your payment of {amount:C} was successful. You can now follow your courses.";
+
+            var notification = new Notification
+            {
+                Message = notificationMessage,
+                IsRead = false,  // New notification, hence unread
+                CreatedAt = DateTime.Now,
+                NotificationType = "Payment",  // This could be extended to other types as well
+                Target = "Student",  // This notification is for the student
+                StudentId = student.StudentId
+            };
+
+            // Save the notification
+            await _studentCourseRepository.AddNotificationAsync(notification);
         }
+
         public async Task<StudentPaymentStatusResponseDTO> GetPaymentStatusByNICAsync(string nic)
 {
     // Retrieve the student by NIC
@@ -362,6 +391,139 @@ namespace MSS1.Services
 
             // Return the count of courses
             return courses.Count();
+        }
+
+        // In your StudentCourseService class
+
+        public async Task<IEnumerable<NotificationResponseDTO>> GetAdminNotificationsAsync()
+        {
+            var notifications = await _studentCourseRepository.GetAdminNotificationsAsync();
+
+            // Map to NotificationResponseDTO
+            return notifications.Select(n => new NotificationResponseDTO
+            {
+                NotificationId = n.NotificationId,
+                Message = n.Message,
+                IsRead = n.IsRead,
+                CreatedAt = n.CreatedAt,
+                NotificationType = n.NotificationType,
+                Target = n.Target,
+                StudentName = n.Student?.User.FullName,  // Assuming Student has a User object with FullName property
+                StudentNIC = n.Student?.User.NICNumber  // Assuming Student has a User object with NICNumber property
+            });
+        }
+        public async Task<IEnumerable<NotificationResponseDTO>> GetPaymentNotificationsByStudentIdAsync(int studentId)
+        {
+            // Get all notifications for the student, filter by "Payment" type and unread status.
+            var notifications = await _studentCourseRepository.GetNotificationsByStudentIdAsync(studentId);
+
+            var paymentNotifications = notifications
+                .Where(n => n.NotificationType == "Payment" && n.IsRead == false)
+                .Select(n => new NotificationResponseDTO
+                {
+                    NotificationId = n.NotificationId,
+                    Message = n.Message,
+                    IsRead = n.IsRead,
+                    CreatedAt = n.CreatedAt,
+                    NotificationType = n.NotificationType,
+                    Target = n.Target,
+                    StudentName = n.Student?.User.FullName,
+                    StudentNIC = n.Student?.User.NICNumber
+                });
+
+            return paymentNotifications;
+        }
+
+        public async Task RecordPaymentAsync(string nic, decimal amount)
+        {
+            // Retrieve the student by NIC
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            // Record the payment (even if it's partial or the student is ready to pay)
+            await _studentCourseRepository.AddPaymentAsync(new Payment
+            {
+                StudentId = student.StudentId,
+                AmountPaid = amount,
+                PaymentDate = DateTime.Now  // Ensure you save the payment date
+            });
+
+            // Check if the student's payment is fully processed
+            var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+            var totalPaid = await _studentCourseRepository.GetTotalAmountPaidByStudentAsync(student.StudentId);
+
+            // Determine if the student has fully paid or still owes money
+            if (totalFee <= totalPaid)
+            {
+                // If fully paid, send a success message
+                var notificationMessage = $"Your payment of {amount:C} has been successfully processed. You have fully paid for your course.";
+
+                var notification = new Notification
+                {
+                    StudentId = student.StudentId,
+                    Message = notificationMessage,
+                    IsRead = false,  // New notification, hence unread
+                    CreatedAt = DateTime.Now,
+                    NotificationType = "Payment",  // Payment-related notification
+                    Target = "Student"  // This notification is for the student
+                };
+
+                // Save the notification to the database
+                await _studentCourseRepository.AddNotificationAsync(notification);
+            }
+            else
+            {
+                // If not fully paid, show how much is left to pay
+                var remainingAmount = totalFee - totalPaid;
+                var notificationMessage = $"Your payment of {amount:C} has been recorded. You still need to pay {remainingAmount:C} to complete your payment.";
+
+                var notification = new Notification
+                {
+                    StudentId = student.StudentId,
+                    Message = notificationMessage,
+                    IsRead = false,  // New notification, hence unread
+                    CreatedAt = DateTime.Now,
+                    NotificationType = "Payment",  // Payment-related notification
+                    Target = "Student"  // This notification is for the student
+                };
+
+                // Save the notification to the database
+                await _studentCourseRepository.AddNotificationAsync(notification);
+            }
+        }
+
+        public async Task<IEnumerable<NotificationResponseDTO>> GetNotificationsForStudentAsync(string nic)
+        {
+            // Step 1: Retrieve the student by NIC
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"Student with NIC {nic} not found.");
+            }
+
+            // Step 2: Retrieve notifications for the student
+            var notifications = await _studentCourseRepository.GetNotificationsForStudentAsync(student.StudentId);
+
+            // Step 3: Map to NotificationResponseDTO
+            var notificationDtos = notifications.Select(n => new NotificationResponseDTO
+            {
+                NotificationId = n.NotificationId,
+                Message = n.Message,
+                IsRead = n.IsRead,
+                CreatedAt = n.CreatedAt,
+                NotificationType = n.NotificationType,
+                Target = n.Target,
+                StudentName = n.Student?.User?.FullName, // Assuming you have the FullName field in the Student's User entity
+                StudentNIC = n.Student?.User?.NICNumber  // Assuming you have the NICNumber field in the Student's User entity
+            });
+
+            // Step 4: Return the mapped notifications
+            return notificationDtos;
         }
 
 

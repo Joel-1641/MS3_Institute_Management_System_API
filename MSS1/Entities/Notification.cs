@@ -1,27 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MSS1.Entities
+﻿namespace MSS1.Entities
 {
     public class Notification
     {
-        [Key]
-        public int NotificationId { get; set; } // Primary Key
+       
+            public int NotificationId { get; set; }
+            public int StudentId { get; set; }
+            public string Message { get; set; }
+            public bool IsRead { get; set; }
+            public DateTime CreatedAt { get; set; }
+            public string NotificationType { get; set; }  // "Enrollment", "Payment"
+            public string Target { get; set; }  
 
-        [Required]
-        public int UserId { get; set; } // Foreign Key to User (sender or recipient)
+        public Student  Student { get; set; }
+        
+       
+        
 
-        [Required]
-        public string Message { get; set; } // Notification message content
-
-        [Required]
-        public DateTime CreatedDate { get; set; } // Date the notification was created
-
-        public bool IsRead { get; set; } // Whether the notification has been read by the user
-
-        // Notification Type (e.g., Payment Due, Course Update, General)
-        public string Type { get; set; } // Payment, Alert, Reminder, etc.
-
-        // Navigation Property
-        public User User { get; set; } // The user who receives the notification
     }
 }

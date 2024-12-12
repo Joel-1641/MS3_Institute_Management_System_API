@@ -119,6 +119,7 @@ namespace MSS1.Controllers
         {
             try
             {
+                // Call the service to record the payment and send notifications
                 await _studentCourseService.RecordPaymentAsync(request.NIC, request.Amount);
                 return Ok("Payment recorded successfully.");
             }
@@ -131,7 +132,8 @@ namespace MSS1.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("payment-status/{nic}")]
+
+        [HttpGet("payment-status/{nic}",Name ="GetPaymentStatus")]
         public async Task<IActionResult> GetPaymentStatus(string nic)
         {
             try
@@ -196,6 +198,59 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { Message = "An error occurred while processing your request.", Details = ex.Message });
             }
         }
+        [HttpGet("admin/notifications")]
+        public async Task<IActionResult> GetAdminNotifications()
+        {
+            try
+            {
+                var notifications = await _studentCourseService.GetAdminNotificationsAsync();
+                return Ok(notifications);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+        [HttpGet("payment-notifications/{nic}")]
+        public async Task<IActionResult> GetPaymentNotifications(string nic)
+        {
+            try
+            {
+                // Retrieve notifications for the student by NIC
+                var notifications = await _studentCourseService.GetNotificationsForStudentAsync(nic);
+
+                // Return the notifications to the client
+                return Ok(notifications);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // If no student found with the given NIC
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); // Handle any other exceptions
+            }
+        }
+
+
+
+
+        // Optionally, you can create a method to mark notifications as read if required:
+        //[HttpPost("mark-as-read/{notificationId}")]
+        //public async Task<IActionResult> MarkNotificationAsRead(int notificationId)
+        //{
+        //    try
+        //    {
+        //        // You could add the method in service to mark the notification as read
+        //        await _studentCourseService.MarkNotificationAsReadAsync(notificationId);
+        //        return Ok(new { message = "Notification marked as read" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
+
 
 
 

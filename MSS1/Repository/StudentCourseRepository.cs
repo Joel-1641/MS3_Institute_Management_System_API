@@ -132,8 +132,72 @@ namespace MSS1.Repository
                 .Include(s => s.User) // Include User to access student details like name, NIC, etc.
                 .ToListAsync();
         }
+        public async Task AddNotificationAsync(Notification notification)
+        {
+            // Add the notification to the database
+            await _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
+        }
 
+        // 2. Get all unread notifications for admin
+        public async Task<IEnumerable<Notification>> GetAdminNotificationsAsync()
+        {
+            // Fetch all notifications where the target is "Admin" and is unread
+            return await _context.Notifications
+                .Where(n => n.Target == "Admin" && !n.IsRead)
+                .OrderByDescending(n => n.CreatedAt)  // Sort by date (most recent first)
+                .ToListAsync();
+        }
 
+        // 3. Get a specific notification by ID
+        public async Task<Notification> GetNotificationByIdAsync(int notificationId)
+        {
+            // Find the notification by its ID
+            return await _context.Notifications
+                .FirstOrDefaultAsync(n => n.NotificationId == notificationId);
+        }
+
+        // 4. Update a notification (mark it as read, or update message, etc.)
+        public async Task UpdateNotificationAsync(Notification notification)
+        {
+            // First, find the existing notification
+            var existingNotification = await _context.Notifications
+                .FirstOrDefaultAsync(n => n.NotificationId == notification.NotificationId);
+
+            if (existingNotification != null)
+            {
+                // Update the necessary fields
+                existingNotification.IsRead = notification.IsRead;
+                existingNotification.Message = notification.Message;
+                existingNotification.CreatedAt = notification.CreatedAt;
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException("Notification not found.");
+            }
+        }
+
+        public async Task<IEnumerable<Notification>> GetNotificationsByStudentIdAsync(int studentId)
+        {
+            return await _context.Notifications
+                .Where(n => n.StudentId == studentId)
+                .OrderByDescending(n => n.CreatedAt)  // Sorting by the most recent notifications
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Notification>> GetNotificationsForStudentAsync(int studentId)
+        {
+            // Assuming you're using Entity Framework
+            return await _context.Notifications
+                                    .Where(n => n.StudentId == studentId)
+                                    .OrderByDescending(n => n.CreatedAt) // Sort notifications by the most recent
+                                    .ToListAsync();
+        }
+
+      
 
 
 

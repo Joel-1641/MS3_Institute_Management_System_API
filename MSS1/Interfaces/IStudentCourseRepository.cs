@@ -22,5 +22,16 @@ namespace MSS1.Interfaces
         Task<decimal> GetTotalAmountPaidByStudentAsync(int studentId);
         //Task<List<StudentPaymentSummaryDTO>> GetAllStudentsPaymentStatusAsync();
         Task<IEnumerable<Student>> GetAllStudentsAsync();
-    }
+        Task UpdateNotificationAsync(Notification notification);
+        Task<Notification> GetNotificationByIdAsync(int notificationId);
+        Task AddNotificationAsync(Notification notification);
+        Task<IEnumerable<Notification>> GetAdminNotificationsAsync();
+        Task<IEnumerable<Notification>> GetNotificationsByStudentIdAsync(int studentId);
+        Task<IEnumerable<Notification>> GetNotificationsForStudentAsync(int studentId);
+        //Task<Student> GetStudentByNICAsync(string nic);
+     //   Task<Student> GetStudentByNICAsync(string nic);
+
+
+
+        }
 }

@@ -24,6 +24,7 @@ namespace MSS1.Database
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<LecturerCourse> LecturerCourses { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
+       // public DbSet<Notification> Notificatios { get; set; }
         //public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,23 +42,13 @@ namespace MSS1.Database
                 .Property(c => c.CourseFee)
                 .HasPrecision(18, 2); // Precision 18, scale 2 (example)
 
-            //modelBuilder.Entity<Payment>()
-            //    .Property(p => p.AmountPaid)
-            //    .HasPrecision(18, 2); // Precision 18, scale 2 (example)
+          
 
             modelBuilder.Entity<Student>()
                 .Property(s => s.RegistrationFee)
                 .HasPrecision(18, 2); // Precision 18, scale 2 (example)
 
-            // Configure many-to-many relationship
-            //modelBuilder.Entity<Student>()
-            //    .HasMany(s => s.Courses)
-            //    .WithMany(c => c.Students)
-            //    .UsingEntity<StudentCourse>(
-            //        j => j.HasOne(sc => sc.Course).WithMany().HasForeignKey(sc => sc.CourseId),
-            //        j => j.HasOne(sc => sc.Student).WithMany().HasForeignKey(sc => sc.StudentId),
-            //        j => j.HasKey(sc => new { sc.StudentId, sc.CourseId })
-            //    );
+           
             modelBuilder.Entity<Role>().HasData(
         new Role { RoleId = 1, RoleName = "Admin" },
         new Role { RoleId = 2, RoleName = "Student" },

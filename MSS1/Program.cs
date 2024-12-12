@@ -81,6 +81,7 @@ internal class Program
         builder.Services.AddScoped<IStudentCourseService, StudentCourseService>();
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
