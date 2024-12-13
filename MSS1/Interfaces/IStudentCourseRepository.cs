@@ -10,7 +10,7 @@ namespace MSS1.Interfaces
         Task<string> GetStudentNICByIdAsync(int studentId);
         Task<IEnumerable<Course>> GetCoursesByStudentIdAsync(int studentId);
         Task<IEnumerable<(Student Student, IEnumerable<Course> Courses)>> GetAllStudentCoursesAsync();
-        Task<int> GetStudentCountForCourseAsync(int courseId);
+       // Task<int> GetStudentCountForCourseAsync(int courseId);
         Task<IEnumerable<Course>> GetAllCoursesAsync();
         Task<IEnumerable<StudentCourse>> GetStudentCoursesByStudentIdAsync(int studentId);
         Task<Student> GetStudentByNICAsync(string nic);
@@ -28,8 +28,10 @@ namespace MSS1.Interfaces
         Task<IEnumerable<Notification>> GetAdminNotificationsAsync();
         Task<IEnumerable<Notification>> GetNotificationsByStudentIdAsync(int studentId);
         Task<IEnumerable<Notification>> GetNotificationsForStudentAsync(int studentId);
+        Task<List<CourseStudentCountDTO>> GetAllCoursesWithStudentCountAsync();
+       // Task<List<CourseStudentCountDTO>> GetAllCoursesWithStudentCountAsync()
         //Task<Student> GetStudentByNICAsync(string nic);
-     //   Task<Student> GetStudentByNICAsync(string nic);
+        //   Task<Student> GetStudentByNICAsync(string nic);
 
 
 

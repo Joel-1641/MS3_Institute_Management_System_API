@@ -72,10 +72,19 @@ namespace MSS1.Repository
                 .Select(group => (group.Key, group.Select(sc => sc.Course)));
         }
 
-        public async Task<int> GetStudentCountForCourseAsync(int courseId)
+        public async Task<List<CourseStudentCountDTO>> GetAllCoursesWithStudentCountAsync()
         {
-            return await _context.StudentCourses.CountAsync(sc => sc.CourseId == courseId);
+            return await _context.Courses
+                .Select(course => new CourseStudentCountDTO
+                {
+                    CourseId = course.CourseId,
+                    CourseName = course.CourseName,
+                    Level = course.Level,
+                    StudentCount = course.StudentCourses.Count()
+                })
+                .ToListAsync();
         }
+
 
         public async Task<IEnumerable<Course>> GetAllCoursesAsync()
         {

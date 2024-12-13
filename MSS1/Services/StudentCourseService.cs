@@ -2,6 +2,7 @@
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Entities;
 using MSS1.Interfaces;
+using MSS1.Repository;
 
 namespace MSS1.Services
 {
@@ -161,10 +162,11 @@ namespace MSS1.Services
         }
 
 
-        public async Task<int> GetStudentCountForCourseAsync(int courseId)
+        public async Task<List<CourseStudentCountDTO>> GetAllCoursesWithStudentCountAsync()
         {
-            return await _studentCourseRepository.GetStudentCountForCourseAsync(courseId);
+            return await _studentCourseRepository.GetAllCoursesWithStudentCountAsync();
         }
+
 
         public async Task<IEnumerable<CourseResponseDTO>> GetAllCoursesAsync()
         {

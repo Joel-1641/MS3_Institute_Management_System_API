@@ -2,6 +2,7 @@
 using MSS1.DTOs.RequestDTOs;
 using MSS1.DTOs.ResponseDTOs;
 using MSS1.Interfaces;
+using MSS1.Services;
 
 namespace MSS1.Controllers
 {
@@ -57,12 +58,7 @@ namespace MSS1.Controllers
         //    return Ok(studentCourses);
         //}
 
-        [HttpGet("course/{courseId}/students-count")]
-        public async Task<IActionResult> GetStudentCountForCourse(int courseId)
-        {
-            var count = await _studentCourseService.GetStudentCountForCourseAsync(courseId);
-            return Ok(new { CourseId = courseId, StudentCount = count });
-        }
+     
 
         [HttpGet("courses")]
         public async Task<IActionResult> GetAllCourses()
@@ -269,6 +265,13 @@ namespace MSS1.Controllers
                 return StatusCode(500, new { message = "An error occurred while generating the report.", details = ex.Message });
             }
         }
+        [HttpGet("GetCoursesWithStudentCount")]
+        public async Task<IActionResult> GetAllCoursesWithStudentCountAsync()
+        {
+            var courses = await _studentCourseService.GetAllCoursesWithStudentCountAsync();
+            return Ok(courses);
+        }
+
 
 
 
