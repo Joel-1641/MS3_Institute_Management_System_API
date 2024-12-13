@@ -11,6 +11,7 @@ namespace MSS1.Interfaces
         Task DeleteStudentAsync(int studentId);
         Task<Student> GetStudentByNICNumberAsync(string nicNumber);
         Task<int> GetTotalStudentCountAsync();
+        Task<decimal> GetCumulativeRegistrationFeeAsync();
         //Task<Student> GetStudentProfile(int studentId);
         //Task UpdateStudentProfile(int studentId, Student student);
         //Task<List<Course>> GetStudentCourses(int studentId);

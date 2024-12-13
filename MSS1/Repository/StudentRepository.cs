@@ -93,5 +93,11 @@ namespace MSS1.Repository
         {
             return await _context.Students.CountAsync();
         }
+        public async Task<decimal> GetCumulativeRegistrationFeeAsync()
+        {
+            return await _context.Students
+                .Where(s => s.IsRegistrationFeePaid) // Only count students who have paid the fee
+                .SumAsync(s => s.RegistrationFee);
+        }
     }
 }

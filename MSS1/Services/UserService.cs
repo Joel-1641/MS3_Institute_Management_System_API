@@ -158,9 +158,9 @@ namespace MSS1.Services
             return new LoginResponseDTO
             {
                 Token = token,
-                UserId = user.UserId,
-                FullName = user.FullName,
-                RoleName = role?.RoleName
+               // UserId = user.UserId,
+                //FullName = user.FullName,
+                //RoleName = role?.RoleName
             };
         }
 

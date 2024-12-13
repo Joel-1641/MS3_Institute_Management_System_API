@@ -12,6 +12,7 @@ namespace MSS1.Interfaces
         Task<StudentResponseDTO> UpdateStudentAsync(int studentId, UpdateStudentRequestDTO request);
         Task<StudentResponseDTO> GetStudentByNICNumberAsync(string nicNumber);
         Task<int> GetTotalStudentCountAsync();
+        Task<decimal> GetCumulativeRegistrationFeeAsync();
        // Task<Student> GetStudentProfile(int studentId);
        // Task UpdateStudentProfile(int studentId, UpdateStudentRequestDTO request);
        // Task<List<Course>> GetStudentCourses(int studentId);

@@ -343,6 +343,25 @@ namespace MSS1.Controllers
             var courseCount = await _courseService.GetTotalCourseCountAsync();
             return Ok(new { GetTotalCourses = courseCount });
         }
-       
+        [HttpGet("registration-fee-summary")]
+        public async Task<IActionResult> GetRegistrationFeeSummary()
+        {
+            try
+            {
+                var cumulativeFee = await _studentService.GetCumulativeRegistrationFeeAsync();
+                var studentCount = await _studentService.GetTotalStudentCountAsync();
+
+                return Ok(new
+                {
+                    CumulativeRegistrationFee = cumulativeFee,
+                    StudentCount = studentCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

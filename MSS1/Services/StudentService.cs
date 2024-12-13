@@ -27,7 +27,7 @@ namespace MSS1.Services
                 Address = s.User.Address,
                 MobileNumber = s.User.MobileNumber,
                 Gender = s.User.Gender,
-                //RegistrationFee = s.RegistrationFee,
+                RegistrationFee = s.RegistrationFee,
                // IsRegistrationFeePaid = s.IsRegistrationFeePaid,
                 NICNumber = s.User.NICNumber,
                 DateOfBirth = s.User.DateOfBirth,
@@ -121,7 +121,10 @@ namespace MSS1.Services
         {
             return await _repository.GetTotalStudentCountAsync();
         }
-
+        public async Task<decimal> GetCumulativeRegistrationFeeAsync()
+        {
+            return await _repository.GetCumulativeRegistrationFeeAsync();
+        }
 
 
 
