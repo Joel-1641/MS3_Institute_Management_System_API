@@ -193,7 +193,8 @@ namespace MSS1.Services
             {
                 CourseId = c.CourseId,
                 CourseName = c.CourseName,
-                Level = c.Level
+                Level = c.Level,
+                CourseImg= c.CourseImg,
             }).ToList();
         }
         public async Task<int> GetTotalCourseCountAsync()
