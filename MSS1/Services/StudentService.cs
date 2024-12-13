@@ -31,6 +31,7 @@ namespace MSS1.Services
                // IsRegistrationFeePaid = s.IsRegistrationFeePaid,
                 NICNumber = s.User.NICNumber,
                 DateOfBirth = s.User.DateOfBirth,
+                ProfilePicture = s.User.ProfilePicture,
 
                 // Include NICNumber here
             }).ToList();
@@ -46,12 +47,13 @@ namespace MSS1.Services
 
             return new StudentResponseDTO
             {
-                //StudentId = student.StudentId,
+                StudentId = student.StudentId,
                 FullName = student.User.FullName,
                 Email = student.User.Email,
                 Address = student.User.Address,
                 MobileNumber = student.User.MobileNumber,
                 Gender = student.User.Gender,
+                ProfilePicture = student.User.ProfilePicture,
                // RegistrationFee = student.RegistrationFee,
                 //IsRegistrationFeePaid = student.IsRegistrationFeePaid,
                 NICNumber = student.User.NICNumber,
@@ -74,7 +76,8 @@ namespace MSS1.Services
                 MobileNumber = student.User.MobileNumber,
                 Gender = student.User.Gender,
                 NICNumber = student.User.NICNumber,
-                DateOfBirth = student.User.DateOfBirth
+                DateOfBirth = student.User.DateOfBirth,
+                ProfilePicture= student.User.ProfilePicture,
             };
         }
         // Delete Student By Id
@@ -98,6 +101,7 @@ namespace MSS1.Services
                     Gender = request.Gender,
                     NICNumber = request.NICNumber,
                     DateOfBirth= request.DateOfBirth,
+                    ProfilePicture = request.ProfilePicture
                 },
                 RegistrationFee = request.RegistrationFee,
                 IsRegistrationFeePaid = request.IsRegistrationFeePaid
@@ -111,9 +115,10 @@ namespace MSS1.Services
                 Address = updatedStudent.User.Address,
                 MobileNumber = updatedStudent.User.MobileNumber,
                 Gender = updatedStudent.User.Gender,
+                ProfilePicture = updatedStudent.User.ProfilePicture,
                // RegistrationFee = updatedStudent.RegistrationFee,
                // IsRegistrationFeePaid = updatedStudent.IsRegistrationFeePaid,
-                //DateOfBirth = updatedStudent.DateOfBirth
+                //DateOfBirth = updatedStudent.DateOfBirth,
 
             };
         }

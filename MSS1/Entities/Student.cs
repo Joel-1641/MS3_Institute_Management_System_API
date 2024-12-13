@@ -11,7 +11,7 @@ namespace MSS1.Entities
         public int UserId { get; set; } // Foreign Key to User
         public decimal RegistrationFee { get; set; }
         public bool IsRegistrationFeePaid { get; set; } // Registration Fee Status
-
+       // public string ProfilePicture {  get; set; }
         // Navigation Properties
         public User User { get; set; }
 

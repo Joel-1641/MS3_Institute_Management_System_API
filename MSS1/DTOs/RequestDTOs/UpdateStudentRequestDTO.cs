@@ -1,4 +1,6 @@
-﻿namespace MSS1.DTOs.RequestDTOs
+﻿using Microsoft.Build.Framework.Profiler;
+
+namespace MSS1.DTOs.RequestDTOs
 {
     public class UpdateStudentRequestDTO
     {
@@ -11,5 +13,6 @@
         public bool IsRegistrationFeePaid { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string NICNumber { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }

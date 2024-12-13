@@ -92,6 +92,7 @@ namespace MSS1.Services
                 Description = c.Description,
                 CourseDuration =c.CourseDuration,
                 CourseType = c.CourseType,
+                CourseImg = c.CourseImg,
                // EnrollDate = c.EnrollDate,
                // CourseStartDate =c.CourseStartDate,
                 //CourseEndDate =c.CourseEndDate
@@ -114,6 +115,7 @@ namespace MSS1.Services
                     Description = c.Description,
                     CourseDuration = c.CourseDuration,
                     CourseType = c.CourseType,
+                    CourseImg = c.CourseImg,
                     
                     
                     
@@ -151,6 +153,7 @@ namespace MSS1.Services
                     CourseDuration = sc.Course.CourseDuration,
                     CourseType = sc.Course.CourseType,
                     EnrollDate = sc.EnrollDate,
+                    CourseImg = sc.CourseImg,
                   //  CourseStartDate =sc.Course.CourseStartDate,
                     //CourseEndDate =sc.Course.CourseEndDate
                 }).ToList()
@@ -175,6 +178,7 @@ namespace MSS1.Services
                 CourseFee = c.CourseFee,
                 CourseDuration = c.CourseDuration,
                 CourseType = c.CourseType,
+                CourseImg = c.CourseImg,
               //  CourseStartDate =c.CourseStartDate,
                 //CourseEndDate =c.CourseEndDate
             });
@@ -217,6 +221,7 @@ namespace MSS1.Services
                 Description = c.Description,
                 CourseDuration = c.CourseDuration,
                 CourseType = c.CourseType,
+                CourseImg = c.CourseImg,
                 //CourseStartDate =c.CourseStartDate,
                 //CourseEndDate = c.CourseEndDate
             });
@@ -559,6 +564,50 @@ namespace MSS1.Services
 
             // Step 4: Return the mapped notifications
             return notificationDtos;
+        }
+        public async Task<StudentReportDTO> GetStudentReportByNICAsync(string nic)
+        {
+            // Step 1: Retrieve the student by NIC
+            var student = await _studentCourseRepository.GetStudentByNICAsync(nic);
+
+            if (student == null)
+            {
+                throw new KeyNotFoundException($"No student found with NIC {nic}.");
+            }
+
+            // Step 2: Get the list of courses the student is enrolled in
+            var courses = await _studentCourseRepository.GetCoursesByStudentIdAsync(student.StudentId);
+
+            // Step 3: Get payment details for the student
+            var totalFee = await _studentCourseRepository.GetTotalFeeForStudentAsync(student.StudentId);
+            var totalPaid = await _studentCourseRepository.GetTotalAmountPaidByStudentAsync(student.StudentId);
+            var paymentDue = totalFee - totalPaid;
+
+            // Step 4: Prepare the report
+            var report = new StudentReportDTO
+            {
+                StudentId = student.StudentId,
+                StudentName = student.User.FullName,
+                NIC = student.User.NICNumber,
+                Courses = courses.Select(c => new CourseReportDTO
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    Level = c.Level,
+                    CourseFee = c.CourseFee,
+                    CourseDuration = c.CourseDuration,
+                    CourseType = c.CourseType
+                }).ToList(),
+                PaymentDetails = new PaymentDetailsDTO
+                {
+                    TotalFee = totalFee,
+                    TotalPaid = totalPaid,
+                    PaymentDue = paymentDue,
+                    PaymentStatus = paymentDue > 0 ? "Pending" : "Paid"
+                }
+            };
+
+            return report;
         }
 
 

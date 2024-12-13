@@ -1,53 +1,53 @@
-﻿using static MSS1.Services.EmailService;
-using System.Net.Mail;
-using System.Net;
-using MSS1.Interfaces;
+﻿//using static MSS1.Services.EmailService;
+//using System.Net.Mail;
+//using System.Net;
+//using MSS1.Interfaces;
 
-namespace MSS1.Services
-{
-    public class EmailService: IEmailService
-    {
+//namespace MSS1.Services
+//{
+//    public class EmailService: IEmailService
+//    {
        
-            private readonly string _smtpHost;
-            private readonly int _smtpPort;
-            private readonly string _smtpUser;
-            private readonly string _smtpPass;
+//            private readonly string _smtpHost;
+//            private readonly int _smtpPort;
+//            private readonly string _smtpUser;
+//            private readonly string _smtpPass;
 
-            public EmailService(IConfiguration configuration)
-            {
-                _smtpHost = configuration["EmailSettings:SmtpHost"];
-                _smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
-                _smtpUser = configuration["EmailSettings:SmtpUser"];
-                _smtpPass = configuration["EmailSettings:SmtpPass"];
-            }
+//            public EmailService(IConfiguration configuration)
+//            {
+//                _smtpHost = configuration["EmailSettings:SmtpHost"];
+//                _smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+//                _smtpUser = configuration["EmailSettings:SmtpUser"];
+//                _smtpPass = configuration["EmailSettings:SmtpPass"];
+//            }
 
-            public async Task SendEmailAsync(string to, string subject, string body)
-            {
-                var fromAddress = new MailAddress(_smtpUser, "ITScholar");
-                var toAddress = new MailAddress(to);
+//            public async Task SendEmailAsync(string to, string subject, string body)
+//            {
+//                var fromAddress = new MailAddress(_smtpUser, "ITScholar");
+//                var toAddress = new MailAddress(to);
 
-                using (var smtpClient = new SmtpClient(_smtpHost, _smtpPort))
-                {
-                    smtpClient.Credentials = new NetworkCredential(_smtpUser, _smtpPass);
-                    smtpClient.EnableSsl = true;
+//                using (var smtpClient = new SmtpClient(_smtpHost, _smtpPort))
+//                {
+//                    smtpClient.Credentials = new NetworkCredential(_smtpUser, _smtpPass);
+//                    smtpClient.EnableSsl = true;
 
-                    using (var message = new MailMessage(fromAddress, toAddress)
-                    {
-                        Subject = subject,
-                        Body = body
-                    })
-                    {
-                        try
-                        {
-                            await smtpClient.SendMailAsync(message);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Failed to send email: " + ex.Message);
-                        }
-                    }
-                }
-            }
-        }
-    }
+//                    using (var message = new MailMessage(fromAddress, toAddress)
+//                    {
+//                        Subject = subject,
+//                        Body = body
+//                    })
+//                    {
+//                        try
+//                        {
+//                            await smtpClient.SendMailAsync(message);
+//                        }
+//                        catch (Exception ex)
+//                        {
+//                            throw new Exception("Failed to send email: " + ex.Message);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 

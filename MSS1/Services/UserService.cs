@@ -19,16 +19,16 @@ namespace MSS1.Services
         private readonly IStudentRepository _studentRepository;
         private readonly ILecturerRepository _lecturerRepository;
         private readonly string _jwtKey;
-        private readonly IEmailService _emailService;
+       // private readonly IEmailService _emailService;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository, string jwtKey, IEmailService emailService)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository, string jwtKey)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _studentRepository = studentRepository;
             _lecturerRepository = lecturerRepository;
             _jwtKey = jwtKey;
-            _emailService = emailService;
+            //_emailService = emailService;
         }
 
 
@@ -82,12 +82,12 @@ namespace MSS1.Services
                 await _userRepository.AddStudentAsync(student);
 
                 // Send email to the student
-                var emailBody = $"Dear {addedUser.FullName} ({addedUser.NICNumber}),\n\n" +
-                "Congratulations on your successful registration as a student. You are now able to select your courses at your convenience.\n\n" +
-                "Should you have any questions or need assistance, feel free to reach out to us.\n\n" +
-                "Best regards,\n" +
-                "The ITScholar Team";
-                await _emailService.SendEmailAsync(addedUser.Email, "Student Registration Successful", emailBody);
+                //var emailBody = $"Dear {addedUser.FullName} ({addedUser.NICNumber}),\n\n" +
+                //"Congratulations on your successful registration as a student. You are now able to select your courses at your convenience.\n\n" +
+                //"Should you have any questions or need assistance, feel free to reach out to us.\n\n" +
+                //"Best regards,\n" +
+                //"The ITScholar Team";
+                //await _emailService.SendEmailAsync(addedUser.Email, "Student Registration Successful", emailBody);
             }
             else if (request is AddLecturerRequestDTO lecturerRequest) // If it's a Lecturer
             {
@@ -95,6 +95,7 @@ namespace MSS1.Services
                     throw new ArgumentException("Courses must be specified for lecturers.");
 
                 var lecturer = new Lecturer
+
                 {
                     UserId = addedUser.UserId,
                     Courses = lecturerRequest.Courses.Select(course => new LecturerCourse { CourseName = course }).ToList()
@@ -176,6 +177,7 @@ namespace MSS1.Services
                 new Claim(ClaimTypes.Role, user.Role?.RoleName),
                 new Claim("UserId", user.UserId.ToString())
             };
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

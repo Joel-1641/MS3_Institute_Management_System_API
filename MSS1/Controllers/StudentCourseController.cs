@@ -250,7 +250,25 @@ namespace MSS1.Controllers
         //        return StatusCode(500, "Internal server error");
         //    }
         //}
-
+        [HttpGet("report/{nic}")]
+        public async Task<IActionResult> GetStudentReportByNICAsync(string nic)
+        {
+            try
+            {
+                var report = await _studentCourseService.GetStudentReportByNICAsync(nic);
+                return Ok(report); // Return the student report as a response with a 200 OK status
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // If student not found, return a 404 Not Found response with the error message
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Return a 500 Internal Server Error response in case of other unexpected errors
+                return StatusCode(500, new { message = "An error occurred while generating the report.", details = ex.Message });
+            }
+        }
 
 
 

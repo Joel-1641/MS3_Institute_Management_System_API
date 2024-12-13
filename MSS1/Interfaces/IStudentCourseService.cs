@@ -25,6 +25,7 @@ namespace MSS1.Interfaces
        // Task<IEnumerable<NotificationResponseDTO>> GetPaymentNotificationsByStudentIdAsync(int studentId);
         Task RecordPaymentAsync(string nic, decimal amount);
         Task<IEnumerable<NotificationResponseDTO>> GetNotificationsForStudentAsync(string nic);
+        Task<StudentReportDTO> GetStudentReportByNICAsync(string nic);
      //   Task<IEnumerable<NotificationResponseDTO>> GetAdminNotificationsAsync();
         //Task<IActionResult> MarkNotificationAsRead(int notificationId);
 

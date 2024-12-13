@@ -81,6 +81,7 @@ namespace MSS1.Repository
             existingStudent.User.Address = student.User.Address;
             existingStudent.User.MobileNumber = student.User.MobileNumber;
             existingStudent.User.Gender = student.User.Gender;
+            existingStudent.User.DateOfBirth = student.User.DateOfBirth;
 
             // Update Student-specific fields
             existingStudent.RegistrationFee = student.RegistrationFee;
