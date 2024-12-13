@@ -80,6 +80,7 @@ internal class Program
         builder.Services.AddScoped<IStudentCourseRepository, StudentCourseRepository>();
         builder.Services.AddScoped<IStudentCourseService, StudentCourseService>();
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
 
 
         var app = builder.Build();

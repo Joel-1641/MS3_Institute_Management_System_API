@@ -19,14 +19,16 @@ namespace MSS1.Services
         private readonly IStudentRepository _studentRepository;
         private readonly ILecturerRepository _lecturerRepository;
         private readonly string _jwtKey;
+        private readonly IEmailService _emailService;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository, string jwtKey)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IStudentRepository studentRepository, ILecturerRepository lecturerRepository, string jwtKey, IEmailService emailService)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _studentRepository = studentRepository;
             _lecturerRepository = lecturerRepository;
             _jwtKey = jwtKey;
+            _emailService = emailService;
         }
 
 
@@ -78,6 +80,14 @@ namespace MSS1.Services
                     IsRegistrationFeePaid = studentRequest.IsRegistrationFeePaid
                 };
                 await _userRepository.AddStudentAsync(student);
+
+                // Send email to the student
+                var emailBody = $"Dear {addedUser.FullName} ({addedUser.NICNumber}),\n\n" +
+                "Congratulations on your successful registration as a student. You are now able to select your courses at your convenience.\n\n" +
+                "Should you have any questions or need assistance, feel free to reach out to us.\n\n" +
+                "Best regards,\n" +
+                "The ITScholar Team";
+                await _emailService.SendEmailAsync(addedUser.Email, "Student Registration Successful", emailBody);
             }
             else if (request is AddLecturerRequestDTO lecturerRequest) // If it's a Lecturer
             {
@@ -106,7 +116,8 @@ namespace MSS1.Services
             };
         }
 
-       private string GenerateSalt()
+
+        private string GenerateSalt()
         {
             var saltBytes = new byte[16];
             using (var rng = new RNGCryptoServiceProvider())
