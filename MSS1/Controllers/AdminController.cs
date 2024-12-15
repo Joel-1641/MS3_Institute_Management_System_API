@@ -15,14 +15,18 @@ namespace MSS1.Controllers
         private readonly ICourseService _courseService;
         private readonly IStudentService _studentService;
         private readonly ILecturerService _lecturerService;
+        private readonly IEmailService _emailService;
 
 
-        public AdminController(IUserService userService,ICourseService courseService, IStudentService studentService,ILecturerService lecturerService)
+        public AdminController(IUserService userService,ICourseService courseService, IStudentService studentService,ILecturerService lecturerService,IEmailService emailService
+
+        )
         {
             _userService = userService;
             _courseService = courseService;
             _studentService = studentService;
             _lecturerService = lecturerService;
+            _emailService = emailService;
         }
 
     
